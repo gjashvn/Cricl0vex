@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cricket Reels Manager</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="header-icon">🏏</div>
+    <div>
+      <div class="header-title">CricL0vex</div>
+      <div class="header-sub">Home of Cricket Lovers!</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-blue" onclick="openAll('teams')">
+    OpenTeams
+    </button>
+    <button class="btn btn-green" onclick="openAll('players')">
+    OpenNews
+    </button>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat"><div class="stat-dot" style="background:var(--blue)"></div><strong id="teamCount">10</strong>&nbsp;IPL Teams</div>
+  <div class="stat"><div class="stat-dot" style="background:var(--green)"></div><strong id="playerCount">12</strong>&nbsp;News Pages</div>
+  <div class="stat"><div class="stat-dot" style="background:var(--gold)"></div><strong id="totalCount">22</strong>&nbsp;Total Pages</div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- TEAMS SECTION -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title-wrap">
+        <span class="section-emoji">🏆</span>
+        <span class="section-title">IPL Teams</span>
+        <span class="section-count" id="teamBadge">10</span>
+      </div>
+      <button class="section-open-all" onclick="openAll('teams')">Open All ↗</button>
+    </div>
+    <div class="list" id="teamsList"></div>
+    <div class="empty-state" id="teamsEmpty">
+      <div class="e-icon">🏏</div>
+      <p>All teams removed from list</p>
+    </div>
+  </section>
+
+  <!-- PLAYERS SECTION -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title-wrap">
+        <span class="section-emoji">📰</span>
+        <span class="section-title">News Pages</span>
+        <span class="section-count" id="playerBadge">12</span>
+      </div>
+      <button class="section-open-all green" onclick="openAll('players')">Open All ↗</button>
+    </div>
+    <div class="list" id="playersList"></div>
+    <div class="empty-state" id="playersEmpty">
+      <div class="e-icon">📱</div>
+      <p>All pages removed from list</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>

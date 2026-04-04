@@ -20,7 +20,7 @@
     { name: "Cricket Gyan Official", url: "https://www.instagram.com/cricketgyanofficial" },
     { name: "Cricxtasy Pod",         url: "https://www.instagram.com/cricxtasypod" },
     { name: "Cricket Cult Official", url: "https://www.instagram.com/cricketcultofficial" },
-    { name: "Cricket Chamber",       url: "https://www.instagram.com/cricket_chamber" },
+    { name: "Cricket Chamber",       url: "https://www.instagram.com/crictracker" },
     { name: "Criclovers.in",         url: "https://www.instagram.com/criclovers.in" },
     { name: "Cricketstan1",          url: "https://www.instagram.com/cricketstan1" },
     { name: "Cric666 Official",      url: "https://www.instagram.com/cric666official" },

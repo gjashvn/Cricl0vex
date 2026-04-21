@@ -1,81 +1,1950 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cricket Reels Manager</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AshX — Build Pages to Pay Bills</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+    /* ── TOKENS ── */
+:root {
+  --bg:        #141414;
+  --bg2:       #1a1a1a;
+  --card:      #1f1f1f;
+  --card2:     #252525;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.04);
+  --coral:     #ff6b6b;
+  --rose:      #ff8e8e;
+  --rose-dim:  rgba(255,107,107,0.12);
+  --rose-glow: rgba(255,107,107,0.22);
+  --warm:      #ffb347;
+  --white:     #f5f0ee;
+  --muted:     #6a6460;
+  --light:     #a09890;
+  --success:   #6bcb77;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  overflow-x:hidden;
+  line-height:1.65;
+}
+
+/* ── GLOBAL ANIMATED BG ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 50% 40% at 80% 10%, rgba(255,107,107,.065) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 10% 80%, rgba(255,107,107,.045) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(255,142,142,.03) 0%, transparent 55%);
+  animation:bgOrbs 12s ease-in-out infinite alternate;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(255,107,107,.055) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 100% 100% at 50% 50%, black, transparent);
+  animation:bgGrid 28s linear infinite;
+  opacity:.55;
+}
+@keyframes bgOrbs{
+  0%  {background-position:0% 0%;}
+  33% {
+    background:
+      radial-gradient(ellipse 55% 45% at 15% 25%, rgba(255,107,107,.07) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 38% at 85% 65%, rgba(255,107,107,.05) 0%, transparent 60%),
+      radial-gradient(ellipse 35% 28% at 50% 90%, rgba(255,142,142,.04) 0%, transparent 55%);
+  }
+  66% {
+    background:
+      radial-gradient(ellipse 45% 50% at 70% 80%, rgba(255,107,107,.06) 0%, transparent 65%),
+      radial-gradient(ellipse 38% 32% at 20% 20%, rgba(255,107,107,.04) 0%, transparent 60%),
+      radial-gradient(ellipse 32% 32% at 80% 10%, rgba(255,142,142,.035) 0%, transparent 55%);
+  }
+  100%{
+    background:
+      radial-gradient(ellipse 50% 40% at 80% 10%, rgba(255,107,107,.065) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 10% 80%, rgba(255,107,107,.045) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 50% 50%, rgba(255,142,142,.03) 0%, transparent 55%);
+  }
+}
+@keyframes bgGrid{from{background-position:0 0;}to{background-position:80px 80px;}}
+
+/* all content above animated bg */
+nav,section,.wrap,.ticker,footer,.overlay{position:relative;z-index:1;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--coral);border-radius:2px;}
+
+/* ══════════════════════════════
+   NAV — ANIMATED
+══════════════════════════════ */
+
+/* scroll progress bar across top */
+.nav-progress{
+  position:fixed;top:0;left:0;z-index:300;
+  height:2px;width:0%;
+  background:linear-gradient(90deg,var(--coral),var(--rose),var(--warm));
+  transition:width .1s linear;
+  box-shadow:0 0 8px rgba(255,107,107,.5);
+}
+
+nav{
+  position:fixed;top:2px;left:0;right:0;z-index:200;
+  height:64px;padding:0 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(16,16,16,0.75);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-bottom:1px solid transparent;
+  transition:background .4s ease, border-color .4s ease, box-shadow .4s ease;
+  animation:navSlideIn .7s cubic-bezier(.34,1.20,.64,1) both;
+}
+@keyframes navSlideIn{
+  from{opacity:0;transform:translateY(-100%);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* glow line at bottom of nav on scroll */
+.nav-glow-line{
+  position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,107,107,.4),transparent);
+  opacity:0;transition:opacity .4s ease;
+}
+nav.scrolled .nav-glow-line{opacity:1;}
+nav.scrolled{
+  background:rgba(16,16,16,0.94);
+  box-shadow:0 4px 32px rgba(0,0,0,.4);
+}
+
+/* ── LOGO ── */
+.nav-logo{
+  font-family:'Fraunces',serif;
+  font-size:23px;font-weight:900;
+  color:var(--white);letter-spacing:-.5px;
+  text-decoration:none;
+  display:flex;align-items:center;gap:2px;
+  position:relative;
+  transition:transform .25s ease;
+}
+.nav-logo:hover{transform:scale(1.06);}
+
+.logo-ash{
+  color:var(--white);
+  transition:letter-spacing .3s ease;
+}
+.nav-logo:hover .logo-ash{letter-spacing:1px;}
+
+.logo-x{
+  color:var(--coral);
+  display:inline-block;
+  animation:logoXPulse 3.5s ease-in-out infinite;
+  transition:transform .25s ease;
+}
+.nav-logo:hover .logo-x{transform:rotate(-8deg) scale(1.15);}
+@keyframes logoXPulse{
+  0%,100%{text-shadow:0 0 12px rgba(255,107,107,.3);}
+  50%{text-shadow:0 0 28px rgba(255,107,107,.7),0 0 50px rgba(255,107,107,.2);}
+}
+
+/* blinking dot after logo */
+.logo-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--coral);
+  display:inline-block;margin-left:3px;margin-bottom:12px;
+  animation:blink 1.8s ease-in-out infinite;
+}
+
+/* ── NAV LINKS ── */
+.nav-links{
+  display:flex;gap:4px;list-style:none;align-items:center;
+  animation:navLinksIn .8s .3s ease both;
+}
+@keyframes navLinksIn{
+  from{opacity:0;transform:translateY(-8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.nav-item{
+  text-decoration:none;
+  color:var(--muted);
+  font-size:13px;font-weight:500;
+  padding:7px 16px;
+  border-radius:7px;
+  letter-spacing:.3px;
+  position:relative;
+  transition:color .25s ease, background .25s ease;
+  overflow:hidden;
+}
+
+/* hover ripple background */
+.nav-item::before{
+  content:'';
+  position:absolute;inset:0;border-radius:7px;
+  background:rgba(255,107,107,.07);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .28s cubic-bezier(.34,1.20,.64,1);
+}
+.nav-item:hover::before{transform:scaleX(1);}
+
+/* animated underline */
+.nav-item::after{
+  content:'';
+  position:absolute;bottom:4px;left:50%;right:50%;
+  height:1.5px;border-radius:2px;
+  background:var(--coral);
+  transition:left .25s ease, right .25s ease;
+}
+.nav-item:hover::after,
+.nav-item.active::after{left:16px;right:16px;}
+
+.nav-item:hover{color:var(--white);}
+.nav-item.active{color:var(--white);}
+
+/* ── BUY NOW CTA ── */
+.nav-cta{
+  position:relative;overflow:hidden;
+  background:var(--coral)!important;
+  color:#fff!important;
+  font-size:13px;font-weight:700!important;
+  padding:8px 18px;border-radius:8px;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;
+  box-shadow:0 2px 14px rgba(255,107,107,.3);
+  transition:transform .22s ease, box-shadow .22s ease!important;
+  animation:ctaPop .9s .5s cubic-bezier(.34,1.36,.64,1) both;
+}
+@keyframes ctaPop{
+  from{opacity:0;transform:scale(.7);}
+  to{opacity:1;transform:scale(1);}
+}
+
+.cta-icon{font-size:13px;transition:transform .25s ease;}
+.nav-cta:hover .cta-icon{transform:rotate(-15deg) scale(1.2);}
+
+/* shine sweep on hover */
+.cta-shine{
+  position:absolute;top:0;left:-60%;
+  width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:skewX(-20deg);
+  transition:none;
+}
+.nav-cta:hover .cta-shine{
+  animation:ctaShine .5s ease forwards;
+}
+@keyframes ctaShine{
+  from{left:-60%;}
+  to{left:140%;}
+}
+
+.nav-cta:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 8px 26px rgba(255,107,107,.5)!important;
+}
+
+/* ── HAMBURGER ── */
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  cursor:pointer;padding:6px;
+  border-radius:6px;
+  transition:background .2s;
+}
+.hamburger:hover{background:rgba(255,107,107,.08);}
+.hamburger span{
+  width:22px;height:2px;
+  background:var(--white);border-radius:2px;
+  transition:all .35s cubic-bezier(.34,1.20,.64,1);
+  transform-origin:center;
+}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--coral);}
+.hamburger.open span:nth-child(2){opacity:0;transform:translateX(-10px) scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--coral);}
+
+/* ── MOBILE MENU ── */
+.mob-menu{
+  display:none;position:fixed;
+  top:66px;left:0;right:0;
+  background:rgba(14,14,14,.98);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  padding:8px 5% 24px;
+  z-index:199;
+  border-bottom:1px solid var(--border);
+  flex-direction:column;gap:0;
+  transform:translateY(-12px);opacity:0;
+  transition:transform .35s cubic-bezier(.34,1.10,.64,1),opacity .3s ease;
+  pointer-events:none;
+}
+.mob-menu.open{
+  display:flex;transform:translateY(0);opacity:1;pointer-events:all;
+}
+
+.mob-link{
+  text-decoration:none;
+  color:var(--light);
+  font-size:15px;font-weight:600;
+  padding:15px 4px;
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:14px;
+  transition:color .2s ease, padding-left .25s ease, background .2s ease;
+  border-radius:6px;
+  position:relative;overflow:hidden;
+}
+.mob-link:last-child{border-bottom:none;}
+.mob-link:hover{color:var(--white);padding-left:10px;}
+
+.mob-num{
+  font-family:'Fira Code',monospace;
+  font-size:10px;color:var(--coral);
+  letter-spacing:1px;flex-shrink:0;width:22px;
+}
+.mob-arr{
+  margin-left:auto;
+  color:var(--muted);font-size:14px;
+  transition:transform .25s ease, color .25s ease;
+}
+.mob-link:hover .mob-arr{transform:translateX(5px);color:var(--coral);}
+
+.mob-buy{
+  margin-top:8px;
+  background:rgba(255,107,107,.08);
+  border:1px solid rgba(255,107,107,.2)!important;
+  border-radius:8px;padding:14px 14px;
+  color:var(--coral)!important;
+}
+.mob-buy:hover{background:rgba(255,107,107,.14)!important;}
+
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:90px 6% 60px;
+  position:relative;overflow:hidden;
+}
+
+/* layered hero bg — dramatic top glow */
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -5%, rgba(255,107,107,.14) 0%, transparent 68%),
+    radial-gradient(ellipse 40% 35% at 90% 80%, rgba(255,142,142,.07) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 30% at 5%  65%, rgba(255,179,71,.05)  0%, transparent 50%);
+  animation:heroBreathe 8s ease-in-out infinite alternate;
+}
+@keyframes heroBreathe{
+  from{opacity:.65;transform:scale(1);}
+  to{opacity:1;transform:scale(1.04);}
+}
+
+/* hero dot grid — pans diagonally */
+.hero-dots{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(255,107,107,.15) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 85%);
+  animation:dotpan 22s linear infinite;
+}
+@keyframes dotpan{from{background-position:0 0;}to{background-position:68px 68px;}}
+
+/* hero inner */
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--rose);letter-spacing:3px;text-transform:uppercase;
+  border:1px solid rgba(255,107,107,.2);
+  padding:6px 16px;border-radius:20px;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp .7s .1s ease forwards;
+}
+.hero-eyebrow::before{
+  content:'';width:5px;height:5px;background:var(--coral);
+  border-radius:50%;animation:blink 1.8s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
+.hero-name{
+  font-family:'Fraunces',serif;
+  font-size:clamp(72px,16vw,160px);
+  font-weight:900;line-height:.88;
+  letter-spacing:-3px;
+  color:var(--white);
+  opacity:0;animation:fadeUp .8s .22s ease forwards;
+}
+.hero-name .x{
+  color:var(--coral);
+  display:inline-block;
+  animation:xpulse 3s ease-in-out infinite;
+}
+@keyframes xpulse{
+  0%,100%{text-shadow:0 0 40px rgba(255,107,107,.3);}
+  50%{text-shadow:0 0 80px rgba(255,107,107,.6),0 0 160px rgba(255,107,107,.2);}
+}
+
+.hero-slogan{
+  font-family:'Fraunces',serif;
+  font-size:clamp(16px,3.2vw,26px);
+  font-weight:700;font-style:italic;
+  letter-spacing:-.3px;margin-top:14px;
+  opacity:0;animation:fadeUp .8s .34s ease forwards;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+}
+.hero-slogan .w1{color:var(--white);font-style:italic;}
+.hero-slogan .w2{color:var(--coral);font-style:italic;}
+.hero-slogan .w3{color:var(--muted);font-size:.72em;font-style:normal;font-weight:400;letter-spacing:2px;text-transform:uppercase;font-family:'Fira Code',monospace;}
+.hero-slogan .w4{color:var(--white);font-style:italic;}
+.hero-slogan .w5{color:var(--coral);font-style:italic;position:relative;}
+.hero-slogan .w5::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--coral),transparent);border-radius:2px;}
+
+/* journey strip inside hero */
+.hero-journey{
+  display:flex;align-items:center;gap:0;
+  flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:fadeUp .8s .78s ease forwards;
+  background:rgba(31,31,31,.6);
+  border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;
+  width:100%;max-width:620px;
+}
+.hj-step{
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 20px;position:relative;flex:1;
+}
+.hj-step::after{
+  content:'';position:absolute;right:0;top:20%;bottom:20%;
+  width:1px;background:var(--border2);
+}
+.hj-step:last-child::after{display:none;}
+.hj-year{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--coral);letter-spacing:2px;margin-bottom:5px;
+}
+.hj-val{
+  font-family:'Fraunces',serif;font-size:26px;font-weight:900;
+  color:var(--white);line-height:1;
+}
+.hj-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+
+/* hero stats bar */
+.hero-stats{
+  display:flex;gap:0;flex-wrap:wrap;justify-content:center;
+  border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  margin-top:28px;
+  background:rgba(31,31,31,.7);backdrop-filter:blur(10px);
+  opacity:0;animation:fadeUp .8s .56s ease forwards;
+}
+.hs{padding:18px 28px;text-align:center;border-right:1px solid var(--border);}
+.hs:last-child{border-right:none;}
+.hs-val{
+  font-family:'Fraunces',serif;font-size:28px;font-weight:900;
+  color:var(--coral);display:block;line-height:1;
+}
+.hs-lbl{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
+
+.hero-btns{
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  margin-top:28px;
+  opacity:0;animation:fadeUp .8s .44s ease forwards;
+}
+
+.btn{
+  display:inline-block;padding:12px 26px;border-radius:8px;
+  font-size:13px;font-weight:600;letter-spacing:.3px;
+  text-decoration:none;transition:all .25s;
+  cursor:pointer;border:none;outline:none;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.btn-primary{background:var(--coral);color:#fff;box-shadow:0 4px 18px rgba(255,107,107,.25);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,107,107,.4);}
+.btn-ghost{background:transparent;color:var(--light);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--coral);color:var(--white);transform:translateY(-3px);}
+.btn-buy-hero{
+  background:transparent;color:var(--coral);
+  border:1.5px solid rgba(255,107,107,.45);
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.btn-buy-hero:hover{background:rgba(255,107,107,.08);border-color:var(--coral);transform:translateY(-3px);}
+.hero-journey-label{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:3px;text-transform:uppercase;
+  margin-top:36px;margin-bottom:14px;
+  opacity:0;animation:fadeUp .8s .68s ease forwards;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════════
+   TICKER
+══════════════════════════════ */
+.ticker{
+  background:var(--coral);padding:10px 0;
+  overflow:hidden;position:relative;
+}
+.ticker::before,.ticker::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
+}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--coral),transparent);}
+.ticker::after{right:0;background:linear-gradient(-90deg,var(--coral),transparent);}
+.ticker-track{display:flex;animation:tick 28s linear infinite;white-space:nowrap;width:max-content;}
+.ti{
+  font-family:'Fira Code',monospace;font-size:12px;font-weight:500;
+  color:#fff;letter-spacing:2px;padding:0 32px;
+  display:flex;align-items:center;gap:12px;
+}
+.ti::after{content:'✦';opacity:.4;font-size:9px;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ══════════════════════════════
+   LAYOUT HELPERS
+══════════════════════════════ */
+.wrap{max-width:1100px;margin:0 auto;padding:0 6%;}
+.sec{padding:80px 0;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 6%;}
+
+.sec-tag{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--coral);letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:10px;
+}
+.sec-tag::before{content:'';width:18px;height:1px;background:var(--coral);flex-shrink:0;}
+.sec-h{
+  font-family:'Fraunces',serif;
+  font-size:clamp(32px,5.5vw,54px);font-weight:900;
+  line-height:1.05;margin-bottom:48px;letter-spacing:-.5px;
+}
+
+/* reveal animation class */
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .65s ease,transform .65s ease;
+}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-left{
+  opacity:0;transform:translateX(-28px);
+  transition:opacity .65s ease,transform .65s ease;
+}
+.reveal-left.in{opacity:1;transform:translateX(0);}
+.reveal-scale{
+  opacity:0;transform:scale(.95);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.reveal-scale.in{opacity:1;transform:scale(1);}
+
+/* stagger delays */
+.d1{transition-delay:.05s;}.d2{transition-delay:.12s;}.d3{transition-delay:.19s;}
+.d4{transition-delay:.26s;}.d5{transition-delay:.33s;}.d6{transition-delay:.40s;}
+
+/* ══════════════════════════════
+   ABOUT
+══════════════════════════════ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+
+.about-text p{
+  font-size:15px;color:var(--light);line-height:1.85;
+  margin-bottom:16px;
+}
+.about-text p:last-child{margin-bottom:0;}
+.about-text b{color:var(--white);font-weight:600;}
+.about-text .hl{color:var(--coral);font-weight:600;}
+
+.about-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.about-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-left:2px solid var(--coral);
+  border-radius:0 8px 8px 0;padding:18px 20px;
+  transition:background .25s,border-left-color .25s,transform .25s;
+}
+.about-card:hover{background:var(--card2);border-left-color:var(--rose);transform:translateX(4px);}
+.ac-label{
+  font-family:'Fira Code',monospace;font-size:9px;
+  color:var(--coral);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;
+}
+.ac-text{font-size:13px;color:var(--light);line-height:1.75;}
+.ac-text b{color:var(--white);font-weight:600;}
+
+.stat-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+.sm{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:16px;
+  transition:border-color .25s,transform .25s;
+}
+.sm:hover{border-color:rgba(255,107,107,.3);transform:translateY(-3px);}
+.sm-val{
+  font-family:'Fraunces',serif;font-size:26px;font-weight:900;
+  color:var(--coral);display:block;line-height:1;
+}
+.sm-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:4px;display:block;}
+
+/* ══════════════════════════════
+   PAGES — ANIMATED
+══════════════════════════════ */
+.pages-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;}
+
+.pcard{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:14px;overflow:hidden;
+  position:relative;
+  transition:transform .35s cubic-bezier(.34,1.10,.64,1),
+             border-color .3s ease,
+             box-shadow .3s ease;
+  cursor:default;
+}
+.pcard:hover{
+  transform:translateY(-10px) scale(1.01);
+  border-color:rgba(255,107,107,.35);
+  box-shadow:
+    0 24px 60px rgba(255,107,107,.10),
+    0 0 0 1px rgba(255,107,107,.08) inset;
+}
+
+/* sweeping coral glow on hover */
+.pcard-glow{
+  position:absolute;inset:0;border-radius:14px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,107,107,.12),transparent 70%);
+  opacity:0;transition:opacity .4s ease;pointer-events:none;z-index:0;
+}
+.pcard:hover .pcard-glow{opacity:1;}
+
+/* top section */
+.pcard-top{
+  padding:22px 22px 0;
+  display:flex;align-items:center;gap:13px;
+  position:relative;z-index:1;
+}
+
+/* animated icon */
+.picon-anim{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+  background:rgba(255,107,107,.08);
+  border:1px solid rgba(255,107,107,.2);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),
+             background .3s ease, box-shadow .3s ease;
+}
+.pcard:hover .picon-anim{
+  transform:scale(1.15) rotate(-6deg);
+  background:rgba(255,107,107,.16);
+  box-shadow:0 4px 18px rgba(255,107,107,.25);
+}
+
+.phandle{font-family:'Fira Code',monospace;font-size:11px;color:var(--muted);margin-bottom:3px;}
+.pname{
+  font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--coral);
+  transition:letter-spacing .3s ease;
+}
+.pcard:hover .pname{letter-spacing:.5px;}
+
+/* active/growing badge */
+.pcard-badge{
+  margin-left:auto;flex-shrink:0;
+  font-family:'Fira Code',monospace;font-size:9px;
+  letter-spacing:1px;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(255,107,107,.08);
+  border:1px solid rgba(255,107,107,.2);
+  color:var(--coral);
+  animation:badgePulse 2.5s ease-in-out infinite;
+}
+@keyframes badgePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,.2);}
+  50%{box-shadow:0 0 0 5px rgba(255,107,107,0);}
+}
+
+/* body */
+.pcard-body{padding:14px 22px 20px;position:relative;z-index:1;}
+.pdesc{font-size:13px;color:var(--light);line-height:1.7;margin-bottom:14px;}
+
+/* metrics grid */
+.pmetrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.pm{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border2);
+  border-radius:8px;padding:11px 13px;
+  transition:border-color .25s ease, background .25s ease, transform .25s ease;
+  position:relative;overflow:hidden;
+}
+.pm::before{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  background:linear-gradient(135deg,rgba(255,107,107,.06),transparent);
+  opacity:0;transition:opacity .3s ease;
+}
+.pm:hover::before{opacity:1;}
+.pm:hover{border-color:rgba(255,107,107,.25);transform:translateY(-2px);}
+
+/* highlighted metric cells */
+.pm-highlight{
+  background:rgba(255,107,107,.06);
+  border-color:rgba(255,107,107,.18);
+}
+
+.pm-val{
+  font-family:'Fraunces',serif;font-size:22px;font-weight:900;
+  color:var(--coral);display:block;line-height:1;
+}
+.pm-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px;display:block;}
+
+/* reach progress bar */
+.reach-bar-wrap{margin-bottom:16px;}
+.reach-bar-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;color:var(--muted);letter-spacing:1px;
+  margin-bottom:6px;font-family:'Fira Code',monospace;
+}
+.reach-pct{color:var(--coral);font-weight:700;}
+.reach-bar-track{
+  height:4px;background:rgba(255,255,255,.06);
+  border-radius:4px;overflow:hidden;
+}
+.reach-bar-fill{
+  height:100%;width:0%;border-radius:4px;
+  background:linear-gradient(90deg,var(--coral),var(--rose));
+  box-shadow:0 0 8px rgba(255,107,107,.4);
+  transition:width 1.4s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* chips */
+.pchips{display:flex;flex-wrap:wrap;gap:5px;}
+.pchip{
+  font-size:10px;font-family:'Fira Code',monospace;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(255,107,107,.06);
+  color:var(--muted);
+  border:1px solid var(--border2);
+  transition:background .2s, color .2s, border-color .2s, transform .2s;
+}
+.pchip:hover{
+  background:rgba(255,107,107,.12);
+  color:var(--white);
+  border-color:rgba(255,107,107,.3);
+  transform:translateY(-2px);
+}
+
+/* footer */
+.pcard-foot{
+  padding:12px 22px 20px;
+  border-top:1px solid var(--border2);
+  position:relative;z-index:1;
+}
+.plink{
+  display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;font-family:'Fira Code',monospace;
+  font-size:11px;color:var(--coral);
+  transition:gap .25s ease, opacity .2s ease;
+}
+.plink:hover{gap:12px;}
+
+/* live dot on link */
+.plink-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--coral);flex-shrink:0;
+  animation:blink 1.8s infinite;
+}
+
+/* past page */
+.past-row{
+  margin-top:18px;background:var(--card);
+  border:1px dashed rgba(255,255,255,.07);
+  border-radius:10px;padding:22px 26px;
+  display:flex;gap:16px;align-items:flex-start;
+  transition:border-color .25s, background .25s;
+}
+.past-row:hover{border-color:rgba(255,179,71,.2);background:var(--card2);}
+.past-pill{
+  white-space:nowrap;flex-shrink:0;
+  background:rgba(255,179,71,.07);border:1px solid rgba(255,179,71,.2);
+  color:var(--warm);font-family:'Fira Code',monospace;
+  font-size:9px;letter-spacing:2px;padding:4px 10px;border-radius:4px;margin-top:2px;
+}
+.past-name{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:#888;margin-bottom:4px;}
+.past-text{font-size:13px;color:var(--muted);line-height:1.7;}
+
+/* ══════════════════════════════
+   CONTENT SECTION
+══════════════════════════════ */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+
+.content-info{display:flex;flex-direction:column;gap:20px;}
+
+.info-block{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:10px;padding:24px;
+  transition:border-color .25s,transform .25s;
+}
+.info-block:hover{border-color:rgba(255,107,107,.25);transform:translateY(-3px);}
+.ib-label{
+  font-family:'Fira Code',monospace;font-size:9px;
+  color:var(--coral);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;
+}
+.ib-title{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;}
+.ib-text{font-size:13px;color:var(--light);line-height:1.7;}
+.ib-links{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.ib-link{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;padding:10px 14px;
+  background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.12);
+  border-radius:6px;font-size:13px;color:var(--light);
+  transition:all .2s;
+}
+.ib-link:hover{background:rgba(255,107,107,.1);color:var(--white);border-color:rgba(255,107,107,.3);transform:translateX(4px);}
+.ib-link .link-icon{font-size:16px;flex-shrink:0;}
+.ib-link .link-handle{font-family:'Fira Code',monospace;font-size:11px;color:var(--coral);}
+
+.email-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Fira Code',monospace;font-size:12px;
+  color:var(--coral);text-decoration:none;
+  padding:10px 16px;background:rgba(255,107,107,.06);
+  border:1px solid rgba(255,107,107,.2);border-radius:6px;
+  margin-top:8px;transition:all .2s;
+}
+.email-link:hover{background:rgba(255,107,107,.12);transform:translateX(4px);}
+
+/* ── CONTACT FORM ── */
+.contact-form-wrap{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:12px;padding:32px;
+  position:relative;overflow:hidden;
+}
+.contact-form-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--coral),var(--rose),var(--warm));
+}
+.cf-title{
+  font-family:'Fraunces',serif;font-size:24px;font-weight:900;
+  color:var(--white);margin-bottom:4px;
+}
+.cf-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.form-group label{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--coral);letter-spacing:2px;text-transform:uppercase;
+}
+.form-input,
+.form-textarea{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:7px;padding:12px 16px;
+  color:var(--white);font-size:14px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;transition:border-color .2s,background .2s;
+  width:100%;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted);}
+.form-input:focus,.form-textarea:focus{
+  border-color:rgba(255,107,107,.5);
+  background:rgba(255,107,107,.04);
+}
+.form-textarea{resize:vertical;min-height:110px;line-height:1.6;}
+
+.btn-send{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;
+  background:var(--coral);color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:.5px;
+  border-radius:7px;border:none;cursor:pointer;
+  transition:all .25s;
+  box-shadow:0 4px 18px rgba(255,107,107,.25);
+}
+.btn-send:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(255,107,107,.4);}
+.btn-send:active{transform:translateY(0);}
+.btn-send .arrow{transition:transform .25s;}
+.btn-send:hover .arrow{transform:translateX(4px);}
+
+.form-success{
+  display:none;text-align:center;padding:24px;
+}
+.form-success .check-icon{font-size:40px;margin-bottom:12px;display:block;}
+.form-success p{font-size:14px;color:var(--light);}
+.form-success b{color:var(--white);}
+
+/* ══════════════════════════════
+   EARNINGS — ANIMATED
+══════════════════════════════ */
+.earn-box{
+  background:var(--card);
+  border:1px solid rgba(255,107,107,.15);
+  border-radius:16px;
+  text-align:center;
+  padding:clamp(48px,7vw,88px) clamp(20px,5vw,80px) clamp(40px,5vw,64px);
+  position:relative;overflow:hidden;
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+.earn-box:hover{
+  border-color:rgba(255,107,107,.3);
+  box-shadow:0 0 60px rgba(255,107,107,.06);
+}
+
+/* top coral fade */
+.earn-box::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,107,107,.10),transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 100%,rgba(255,107,107,.04),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 90% 100%,rgba(255,107,107,.04),transparent 60%);
+  pointer-events:none;
+}
+
+/* rotating rays behind number */
+.earn-rays{
+  position:absolute;top:50%;left:50%;
+  width:500px;height:500px;
+  transform:translate(-50%,-50%);
+  background:repeating-conic-gradient(
+    rgba(255,107,107,.04) 0deg 10deg,
+    transparent 10deg 30deg
+  );
+  border-radius:50%;
+  animation:raysRotate 20s linear infinite;
+  pointer-events:none;
+}
+@keyframes raysRotate{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
+
+/* floating ₹ particles */
+.earn-particle{
+  position:absolute;font-family:'Fraunces',serif;font-weight:900;
+  color:var(--coral);pointer-events:none;user-select:none;
+  animation:floatParticle linear infinite;
+  opacity:0;
+}
+.p1{font-size:18px;left:8%;top:20%;animation-duration:6s;animation-delay:0s;}
+.p2{font-size:12px;right:10%;top:35%;animation-duration:8s;animation-delay:1.5s;}
+.p3{font-size:22px;left:15%;bottom:20%;animation-duration:7s;animation-delay:3s;}
+.p4{font-size:14px;right:15%;bottom:25%;animation-duration:9s;animation-delay:0.8s;}
+@keyframes floatParticle{
+  0%{opacity:0;transform:translateY(10px) scale(.8);}
+  20%{opacity:.35;}
+  80%{opacity:.2;}
+  100%{opacity:0;transform:translateY(-30px) scale(1.1);}
+}
+
+.earn-inner{position:relative;z-index:1;}
+
+.earn-label-top{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+.earn-big{
+  font-family:'Fraunces',serif;
+  font-size:clamp(64px,14vw,120px);
+  font-weight:900;line-height:1;
+  color:var(--coral);
+  position:relative;display:inline-block;
+  animation:earnPulse 3s ease-in-out infinite;
+}
+@keyframes earnPulse{
+  0%,100%{text-shadow:0 0 40px rgba(255,107,107,.25),0 0 80px rgba(255,107,107,.1);}
+  50%{text-shadow:0 0 60px rgba(255,107,107,.45),0 0 120px rgba(255,107,107,.2);}
+}
+
+.earn-sub{
+  font-size:12px;color:var(--muted);
+  letter-spacing:3px;text-transform:uppercase;
+  margin-top:12px;margin-bottom:32px;
+}
+
+/* source pills row */
+.earn-pills{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+}
+.earn-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:24px;
+  background:rgba(255,107,107,.07);
+  border:1px solid rgba(255,107,107,.18);
+  font-size:12px;color:var(--light);
+  transition:background .25s, transform .25s, color .25s;
+}
+.earn-pill:hover{
+  background:rgba(255,107,107,.14);
+  color:var(--white);
+  transform:translateY(-3px);
+}
+.ep-icon{font-size:14px;}
+.ep-text{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:1px;}
+
+/* ══════════════════════════════
+   CTA
+══════════════════════════════ */
+.cta-section{padding:90px 6%;text-align:center;}
+.cta-h{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,7vw,72px);font-weight:900;
+  line-height:.95;margin-bottom:14px;letter-spacing:-.5px;
+}
+.cta-h .accent{color:var(--coral);}
+.cta-sub{font-size:15px;color:var(--muted);margin-bottom:36px;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer{
+  padding:22px 6%;border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.f-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:900;}
+.f-logo span{color:var(--coral);}
+.f-links{display:flex;gap:18px;}
+.f-links a{text-decoration:none;font-size:12px;color:var(--muted);transition:color .2s;}
+.f-links a:hover{color:var(--coral);}
+.f-copy{font-family:'Fira Code',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px;}
+
+/* ══════════════════════════════
+   JOURNEY TIMELINE — ANIMATED
+══════════════════════════════ */
+.journey-wrap{
+  position:relative;
+  padding-left:48px;
+}
+
+/* animated fill line */
+.journey-wrap::before{
+  content:'';position:absolute;
+  left:15px;top:8px;
+  width:2px;height:0;
+  background:linear-gradient(to bottom,
+    var(--coral) 0%,
+    rgba(255,107,107,.6) 60%,
+    rgba(255,107,107,.1) 100%);
+  border-radius:2px;
+  transition:height 1.8s cubic-bezier(.25,.46,.45,.94);
+}
+.journey-wrap.line-in::before{height:calc(100% - 16px);}
+
+/* glow shimmer travelling along the line */
+.journey-wrap::after{
+  content:'';position:absolute;
+  left:14px;top:0;
+  width:4px;height:40px;
+  background:linear-gradient(to bottom,transparent,rgba(255,107,107,.9),transparent);
+  border-radius:2px;
+  opacity:0;
+  animation:lineGlow 3s ease-in-out 1.2s infinite;
+}
+@keyframes lineGlow{
+  0%{opacity:0;transform:translateY(-20px);}
+  20%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;transform:translateY(320px);}
+}
+
+/* each item */
+.jitem{
+  position:relative;
+  margin-bottom:52px;
+  opacity:0;
+  transform:translateX(-32px);
+  transition:opacity .7s ease, transform .7s cubic-bezier(.34,1.20,.64,1);
+}
+.jitem:last-child{margin-bottom:0;}
+.jitem.jitem-in{opacity:1;transform:translateX(0);}
+
+/* dot */
+.jdot{
+  position:absolute;left:-37px;top:6px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--coral);
+  border:2px solid var(--bg);
+  box-shadow:0 0 0 0 rgba(255,107,107,.4);
+  transition:box-shadow .4s ease, transform .4s ease;
+  transform:scale(0);
+}
+.jitem.jitem-in .jdot{
+  transform:scale(1);
+  animation:dotAppear .5s cubic-bezier(.34,1.56,.64,1) forwards,
+            dotPulse 2.8s ease-in-out 0.8s infinite;
+}
+@keyframes dotAppear{from{transform:scale(0);}to{transform:scale(1);}}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,.4);}
+  50%{box-shadow:0 0 0 7px rgba(255,107,107,0);}
+}
+
+/* year badge */
+.jyear{
+  font-family:'Fira Code',monospace;font-size:10px;
+  color:var(--coral);letter-spacing:3px;
+  margin-bottom:6px;
+  display:inline-flex;align-items:center;gap:8px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s .15s ease, transform .5s .15s ease;
+}
+.jitem.jitem-in .jyear{opacity:1;transform:translateY(0);}
+.jyear::after{
+  content:'';display:inline-block;
+  width:0;height:1px;background:var(--coral);opacity:.4;
+  transition:width .6s .3s ease;
+}
+.jitem.jitem-in .jyear::after{width:24px;}
+
+/* title */
+.jtitle{
+  font-family:'Fraunces',serif;font-size:24px;font-weight:900;
+  line-height:1.1;margin-bottom:10px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .55s .22s ease, transform .55s .22s cubic-bezier(.34,1.10,.64,1);
+}
+.jitem.jitem-in .jtitle{opacity:1;transform:translateY(0);}
+
+/* desc */
+.jdesc{
+  font-size:14px;color:var(--light);line-height:1.82;max-width:620px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .6s .32s ease, transform .6s .32s ease;
+}
+.jitem.jitem-in .jdesc{opacity:1;transform:translateY(0);}
+.jdesc b{color:var(--white);font-weight:600;}
+
+/* connector card background on hover */
+.jitem::before{
+  content:'';
+  position:absolute;
+  left:-16px;right:0;top:-10px;bottom:-10px;
+  border-radius:10px;
+  background:rgba(255,107,107,0);
+  border:1px solid rgba(255,107,107,0);
+  transition:background .3s ease, border-color .3s ease;
+  pointer-events:none;
+}
+.jitem.jitem-in:hover::before{
+  background:rgba(255,107,107,.03);
+  border-color:rgba(255,107,107,.08);
+}
+.jitem.jitem-in:hover .jdot{
+  box-shadow:0 0 0 8px rgba(255,107,107,0),0 0 20px rgba(255,107,107,.5);
+}
+
+/* ══════════════════════════════
+   MODAL (Buy Now)
+══════════════════════════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(10,10,10,.82);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:500;
+  display:none;align-items:flex-start;justify-content:center;
+  padding:40px 20px;overflow-y:auto;
+}
+.overlay.open{display:flex;}
+.modal{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:14px;max-width:480px;width:100%;
+  max-height:90vh;overflow-y:auto;position:relative;
+  animation:modalIn .32s cubic-bezier(.34,1.36,.64,1) both;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.88) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-head{
+  padding:28px 28px 22px;
+  background:linear-gradient(135deg,rgba(255,107,107,.1),rgba(255,107,107,.03));
+  border-radius:14px 14px 0 0;border-bottom:1px solid var(--border2);position:relative;
+}
+.m-close{
+  position:absolute;top:14px;right:14px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--border2);
+  color:var(--light);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.m-close:hover{background:rgba(255,107,107,.15);color:var(--coral);}
+.m-tag{font-family:'Fira Code',monospace;font-size:9px;color:var(--coral);letter-spacing:3px;margin-bottom:8px;}
+.m-title{font-family:'Fraunces',serif;font-size:26px;font-weight:900;margin-bottom:4px;}
+.m-sub{font-size:13px;color:var(--muted);}
+.modal-body{padding:22px 28px 28px;}
+.m-sec{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--rose);margin:18px 0 10px;}
+.m-sec:first-child{margin-top:0;}
+.m-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.m-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--light);}
+.m-dot{width:5px;height:5px;background:var(--coral);border-radius:50%;flex-shrink:0;margin-top:7px;}
+.m-price-box{
+  background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.15);
+  border-radius:8px;padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin:18px 0;
+}
+.m-price-num{font-family:'Fraunces',serif;font-size:34px;font-weight:900;color:var(--white);line-height:1;}
+.m-price-note{font-size:11px;color:var(--muted);margin-top:3px;}
+.m-pay{
+  display:block;width:100%;padding:14px;
+  background:var(--coral);color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;font-weight:700;letter-spacing:.5px;
+  text-align:center;border-radius:7px;border:none;cursor:pointer;
+  transition:all .25s;text-decoration:none;
+  box-shadow:0 4px 18px rgba(255,107,107,.3);
+}
+.m-pay:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,107,107,.45);}
+.m-note{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;}
+.m-note a{color:var(--coral);text-decoration:none;}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media(max-width:1024px){
+  .content-grid{grid-template-columns:1fr;gap:36px;}
+}
+@media(max-width:900px){
+  .about-grid{grid-template-columns:1fr;gap:40px;}
+  .content-grid{grid-template-columns:1fr;gap:36px;}
+  .about-cards{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+
+  /* hero */
+  .hero{padding:80px 5% 50px;}
+  .hero-name{font-size:clamp(64px,18vw,120px);}
+  .hero-btns{flex-direction:column;align-items:center;gap:10px;}
+  .hero-btns .btn{width:100%;max-width:280px;text-align:center;}
+  .hero-journey{max-width:100%;}
+  .hj-step{padding:12px 10px;flex:1;min-width:0;}
+  .hj-val{font-size:18px;}
+  .hj-year{font-size:9px;}
+  .hj-lbl{font-size:9px;}
+  .hs{padding:14px 16px;}
+  .hs-val{font-size:22px;}
+
+  /* sections */
+  .wrap{padding:0 5%;}
+  .sec{padding:60px 0;}
+  .pages-grid{grid-template-columns:1fr;}
+  .about-cards{grid-template-columns:1fr;}
+  .stat-mini-grid{grid-template-columns:1fr 1fr;}
+  .past-row{flex-direction:column;gap:10px;}
+
+  /* content */
+  .content-grid{grid-template-columns:1fr;}
+  .contact-form-wrap{padding:24px 18px;}
+
+  /* footer */
+  footer{flex-direction:column;text-align:center;gap:14px;}
+  .f-links{justify-content:center;}
+
+  /* modal */
+  .modal-head,.modal-body{padding-left:18px;padding-right:18px;}
+}
+@media(max-width:480px){
+  .hero{padding:72px 4% 44px;}
+  .hero-name{font-size:clamp(58px,20vw,100px);}
+  .hero-journey{border-radius:8px;}
+  .hj-step{padding:10px 6px;}
+  .hj-val{font-size:16px;}
+  .hero-stats{border-radius:8px;}
+  .hs{padding:12px 10px;min-width:0;}
+  .hs-val{font-size:20px;}
+  .hs-lbl{font-size:9px;}
+  .pages-grid{grid-template-columns:1fr;}
+  .pmetrics{grid-template-columns:1fr 1fr;}
+  .content-grid{grid-template-columns:1fr;}
+  .earn-big{font-size:clamp(52px,14vw,90px);}
+  .wrap{padding:0 4%;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .cta-btns .btn{width:100%;max-width:260px;text-align:center;}
+}
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="header-left">
-    <div class="header-icon">🏏</div>
-    <div>
-      <div class="header-title">CricL0vex</div>
-      <div class="header-sub">Home of Cricket Lovers!</div>
-    </div>
-  </div>
-  <div class="header-actions">
-    <button class="btn btn-blue" onclick="openAll('teams')">
-    OpenTeams
-    </button>
-    <button class="btn btn-green" onclick="openAll('players')">
-    OpenNews
-    </button>
-  </div>
-</header>
+<!-- ══ SCROLL PROGRESS BAR ══ -->
+<div class="nav-progress" id="navProgress"></div>
 
-<!-- STATS -->
-<div class="stats-bar" id="statsBar">
-  <div class="stat"><div class="stat-dot" style="background:var(--blue)"></div><strong id="teamCount">10</strong>&nbsp;IPL Teams</div>
-  <div class="stat"><div class="stat-dot" style="background:var(--green)"></div><strong id="playerCount">12</strong>&nbsp;News Pages</div>
-  <div class="stat"><div class="stat-dot" style="background:var(--gold)"></div><strong id="totalCount">22</strong>&nbsp;Total Pages</div>
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <!-- animated coral line at bottom on scroll -->
+  <div class="nav-glow-line"></div>
+
+  <a href="#" class="nav-logo">
+    <span class="logo-ash">Ash</span><span class="logo-x">X</span>
+    <span class="logo-dot"></span>
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about"   class="nav-item" data-label="About">About</a></li>
+    <li><a href="#pages"   class="nav-item" data-label="Pages">Pages</a></li>
+    <li><a href="#content" class="nav-item" data-label="Content">Content</a></li>
+    <li>
+      <a href="#" class="nav-cta" onclick="openModal();return false;">
+        <span class="cta-icon">🛒</span>
+        <span class="cta-text">Buy Now</span>
+        <span class="cta-shine"></span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="hamburger" id="hbg" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="#about"   onclick="closeMenu()" class="mob-link">
+    <span class="mob-num">01</span><span>About</span><span class="mob-arr">→</span>
+  </a>
+  <a href="#pages"   onclick="closeMenu()" class="mob-link">
+    <span class="mob-num">02</span><span>Pages</span><span class="mob-arr">→</span>
+  </a>
+  <a href="#content" onclick="closeMenu()" class="mob-link">
+    <span class="mob-num">03</span><span>Content</span><span class="mob-arr">→</span>
+  </a>
+  <a href="#" onclick="openModal();closeMenu();return false;" class="mob-link mob-buy">
+    <span class="mob-num">🛒</span><span>Buy Now</span><span class="mob-arr">→</span>
+  </a>
 </div>
 
-<!-- MAIN -->
-<main>
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
 
-  <!-- TEAMS SECTION -->
-  <section class="section">
-    <div class="section-header">
-      <div class="section-title-wrap">
-        <span class="section-emoji">🏆</span>
-        <span class="section-title">IPL Teams</span>
-        <span class="section-count" id="teamBadge">10</span>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Instagram Creator Portfolio</div>
+
+    <h1 class="hero-name">ASH<span class="x">X</span></h1>
+    <p class="hero-slogan">
+      <span class="w1">Build</span>
+      <span class="w2">Pages</span>
+      <span class="w3">to</span>
+      <span class="w4">Pay</span>
+      <span class="w5">Bills</span>
+    </p>
+
+    <!-- Buttons right below slogan -->
+    <div class="hero-btns">
+      <a href="#about" class="btn btn-primary">Know My Story ↓</a>
+      <button class="btn btn-buy-hero" onclick="openModal()">🛒 Buy Products</button>
+      <a href="#content" class="btn btn-ghost">Get in Touch</a>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-val">5K+</span><div class="hs-lbl">Followers</div></div>
+      <div class="hs"><span class="hs-val">23M+</span><div class="hs-lbl">Total Views</div></div>
+      <div class="hs"><span class="hs-val">₹20K+</span><div class="hs-lbl">Earned</div></div>
+      <div class="hs"><span class="hs-val">3+</span><div class="hs-lbl">Pages Built</div></div>
+    </div>
+
+    <!-- Journey milestones BELOW stats -->
+    <div class="hero-journey-label">— My Journey —</div>
+    <div class="hero-journey">
+      <div class="hj-step">
+        <div class="hj-year">2022</div>
+        <div class="hj-val">First</div>
+        <div class="hj-lbl">Page Started</div>
       </div>
-      <button class="section-open-all" onclick="openAll('teams')">Open All ↗</button>
-    </div>
-    <div class="list" id="teamsList"></div>
-    <div class="empty-state" id="teamsEmpty">
-      <div class="e-icon">🏏</div>
-      <p>All teams removed from list</p>
-    </div>
-  </section>
-
-  <!-- PLAYERS SECTION -->
-  <section class="section">
-    <div class="section-header">
-      <div class="section-title-wrap">
-        <span class="section-emoji">📰</span>
-        <span class="section-title">News Pages</span>
-        <span class="section-count" id="playerBadge">12</span>
+      <div class="hj-step">
+        <div class="hj-year">2023</div>
+        <div class="hj-val">3K+</div>
+        <div class="hj-lbl">@ashadits_</div>
       </div>
-      <button class="section-open-all green" onclick="openAll('players')">Open All ↗</button>
+      <div class="hj-step">
+        <div class="hj-year">2024</div>
+        <div class="hj-val">10.1M</div>
+        <div class="hj-lbl">Single Reel</div>
+      </div>
+      <div class="hj-step">
+        <div class="hj-year">2025</div>
+        <div class="hj-val">23M+</div>
+        <div class="hj-lbl">Views (90d)</div>
+      </div>
+      <div class="hj-step">
+        <div class="hj-year">NOW</div>
+        <div class="hj-val">₹20K+</div>
+        <div class="hj-lbl">Earned</div>
+      </div>
     </div>
-    <div class="list" id="playersList"></div>
-    <div class="empty-state" id="playersEmpty">
-      <div class="e-icon">📱</div>
-      <p>All pages removed from list</p>
+  </div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ti">AshX</div>
+    <div class="ti">Build Pages to Pay Bills</div>
+    <div class="ti">CricLovex</div>
+    <div class="ti">The Mind Word</div>
+    <div class="ti">23M+ Views</div>
+    <div class="ti">10.1M Single Reel</div>
+    <div class="ti">₹20K+ Earned</div>
+    <div class="ti">Cricket · Motivation</div>
+    <div class="ti">Faceless Pages</div>
+    <div class="ti">AshX</div>
+    <div class="ti">Build Pages to Pay Bills</div>
+    <div class="ti">CricLovex</div>
+    <div class="ti">The Mind Word</div>
+    <div class="ti">23M+ Views</div>
+    <div class="ti">10.1M Single Reel</div>
+    <div class="ti">₹20K+ Earned</div>
+    <div class="ti">Cricket · Motivation</div>
+    <div class="ti">Faceless Pages</div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div class="wrap" id="about">
+  <div class="sec">
+    <div class="sec-tag reveal">About AshX</div>
+    <h2 class="sec-h reveal d1">Who Is <span style="color:var(--coral)">AshX?</span></h2>
+
+    <div class="about-text reveal-left" style="max-width:680px;margin-bottom:36px;">
+      <p>I'm <b>Rathod Ashvin</b> — a self-taught Instagram creator who builds <span class="hl">faceless pages</span> from scratch. No team. No budget. Just consistency and strategy.</p>
+      <p>Started in <b>2022</b> with zero knowledge — got my first page banned because I didn't understand the rules. Most people quit there. I didn't.</p>
+      <p>Today I run <b>CricLovex</b> and <b>The Mind Word</b> — two pages in completely different niches, both generating real views and real income. My cricket page alone crossed <span class="hl">23M+ views in 90 days</span> with one reel hitting <span class="hl">10.1M organically.</span></p>
     </div>
-  </section>
 
-</main>
+    <div class="about-cards reveal d1">
+      <div class="about-card">
+        <div class="ac-label">The Struggle</div>
+        <div class="ac-text">Started with nothing — no mentor, no shortcut. Got accounts banned. Wasted months. Made every mistake. That's exactly why I understand what <b>actually works.</b></div>
+      </div>
+      <div class="about-card">
+        <div class="ac-label">The Breakthrough</div>
+        <div class="ac-text"><b>@ashadits_</b> crossed 3K followers and 10M+ views before getting suspended in July 2025. Instead of stopping — I launched two stronger pages with everything I'd learned.</div>
+      </div>
+      <div class="about-card">
+        <div class="ac-label">The Goal</div>
+        <div class="ac-text">Scale both pages to <b>10K+ followers</b>, launch a digital guide, and prove that anyone can build a page that pays — <b>no face required.</b></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- TOAST -->
-<div id="toast"></div>
-<script src="script.js"></script>
+<div class="sep"></div>
+
+<!-- ══ PAGES ══ -->
+<div class="wrap" id="pages">
+  <div class="sec">
+    <div class="sec-tag reveal">Active Pages</div>
+    <h2 class="sec-h reveal d1">My <span style="color:var(--coral)">Pages</span></h2>
+    <div class="pages-grid">
+
+      <!-- CARD 1: CricLovex -->
+      <div class="pcard reveal d1" data-tilt>
+        <div class="pcard-glow"></div>
+        <div class="pcard-top">
+          <div class="picon picon-anim">🏏</div>
+          <div>
+            <div class="phandle">@cricl0vex</div>
+            <div class="pname">CricLovex</div>
+          </div>
+          <span class="pcard-badge">🔥 Active</span>
+        </div>
+        <div class="pcard-body">
+          <p class="pdesc">Home of Cricket Lovers — Memes, Breaking News & IPL Updates. 98.4% reach to non-followers.</p>
+          <div class="pmetrics">
+            <div class="pm">
+              <span class="pm-val count-up" data-target="2000" data-suffix="K+">2K+</span>
+              <span class="pm-lbl">Followers</span>
+            </div>
+            <div class="pm pm-highlight">
+              <span class="pm-val count-up" data-target="23" data-suffix="M+">23M+</span>
+              <span class="pm-lbl">Views 90d</span>
+            </div>
+            <div class="pm">
+              <span class="pm-val">6.6M+</span>
+              <span class="pm-lbl">Reached</span>
+            </div>
+            <div class="pm pm-highlight">
+              <span class="pm-val">98.4%</span>
+              <span class="pm-lbl">Non-Follower</span>
+            </div>
+          </div>
+          <!-- reach bar -->
+          <div class="reach-bar-wrap">
+            <div class="reach-bar-label">
+              <span>Non-follower reach</span>
+              <span class="reach-pct">98.4%</span>
+            </div>
+            <div class="reach-bar-track">
+              <div class="reach-bar-fill" data-width="98.4"></div>
+            </div>
+          </div>
+          <div class="pchips">
+            <span class="pchip">🏏 Cricket</span>
+            <span class="pchip">😂 Memes</span>
+            <span class="pchip">🏆 IPL</span>
+            <span class="pchip">📰 News</span>
+          </div>
+        </div>
+        <div class="pcard-foot">
+          <a href="https://www.instagram.com/cricl0vex" target="_blank" class="plink">
+            <span class="plink-dot"></span>
+            ↗ instagram.com/cricl0vex
+          </a>
+        </div>
+      </div>
+
+      <!-- CARD 2: The Mind Word -->
+      <div class="pcard reveal d2" data-tilt>
+        <div class="pcard-glow"></div>
+        <div class="pcard-top">
+          <div class="picon picon-anim">🧠</div>
+          <div>
+            <div class="phandle">@themindword_</div>
+            <div class="pname">The Mind Word</div>
+          </div>
+          <span class="pcard-badge">⚡ Growing</span>
+        </div>
+        <div class="pcard-body">
+          <p class="pdesc">Mindset · Motivation · Psychology — Powerful words, real discipline. 99.8% non-follower reach.</p>
+          <div class="pmetrics">
+            <div class="pm">
+              <span class="pm-val">3K+</span>
+              <span class="pm-lbl">Followers</span>
+            </div>
+            <div class="pm pm-highlight">
+              <span class="pm-val">1M+</span>
+              <span class="pm-lbl">Views 10d</span>
+            </div>
+            <div class="pm">
+              <span class="pm-val">307K+</span>
+              <span class="pm-lbl">Reached</span>
+            </div>
+            <div class="pm pm-highlight">
+              <span class="pm-val">99.8%</span>
+              <span class="pm-lbl">Non-Follower</span>
+            </div>
+          </div>
+          <!-- reach bar -->
+          <div class="reach-bar-wrap">
+            <div class="reach-bar-label">
+              <span>Non-follower reach</span>
+              <span class="reach-pct">99.8%</span>
+            </div>
+            <div class="reach-bar-track">
+              <div class="reach-bar-fill" data-width="99.8"></div>
+            </div>
+          </div>
+          <div class="pchips">
+            <span class="pchip">💡 Motivation</span>
+            <span class="pchip">🧠 Mindset</span>
+            <span class="pchip">🔬 Psychology</span>
+          </div>
+        </div>
+        <div class="pcard-foot">
+          <a href="https://www.instagram.com/themindword_" target="_blank" class="plink">
+            <span class="plink-dot"></span>
+            ↗ instagram.com/themindword_
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="past-row reveal">
+      <span class="past-pill">PAST PAGE</span>
+      <div>
+        <div class="past-name">@ashadits_ — 2023 to July 2025</div>
+        <p class="past-text">Built from absolute zero to <b>3,261 followers</b> with <b>10M+ total views</b> and <b>100+ reels</b> over 1.5 years — all organic, no paid promotion. Covered Cricket, IPL news, and viral sports content. This page was my real classroom: I learned content strategy, audience behavior, posting consistency, and what it actually takes to grow on Instagram. Suspended in July 2025 for a policy violation — one of the toughest moments in this journey. But every lesson, every mistake, and every win from @ashadits_ directly shaped how CricLovex and The Mind Word were built.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ══ EARNINGS ══ -->
+<div class="wrap">
+  <div class="sec">
+    <div class="sec-tag reveal">Revenue</div>
+    <h2 class="sec-h reveal d1">Total <span style="color:var(--coral)">Earnings</span></h2>
+    <div class="earn-box reveal-scale">
+      <!-- rotating rays bg -->
+      <div class="earn-rays"></div>
+      <!-- floating particles -->
+      <span class="earn-particle p1">₹</span>
+      <span class="earn-particle p2">✦</span>
+      <span class="earn-particle p3">₹</span>
+      <span class="earn-particle p4">★</span>
+
+      <div class="earn-inner">
+        <div class="earn-label-top">Total Earned Across All Pages</div>
+        <div class="earn-big earn-count" data-target="20000">₹20,000+</div>
+        <p class="earn-sub">All pages · Digital products · Promotions</p>
+
+        <div class="earn-pills">
+          <div class="earn-pill">
+            <span class="ep-icon">🏏</span>
+            <span class="ep-text">CricLovex</span>
+          </div>
+          <div class="earn-pill">
+            <span class="ep-icon">🧠</span>
+            <span class="ep-text">The Mind Word</span>
+          </div>
+          <div class="earn-pill">
+            <span class="ep-icon">📄</span>
+            <span class="ep-text">Digital Products</span>
+          </div>
+          <div class="earn-pill">
+            <span class="ep-icon">📢</span>
+            <span class="ep-text">Promotions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ══ JOURNEY ══ -->
+<div class="wrap" id="journey">
+  <div class="sec">
+    <div class="sec-tag reveal">Timeline</div>
+    <h2 class="sec-h reveal d1">The <span style="color:var(--coral)">Journey</span></h2>
+    <div class="journey-wrap">
+      <div class="jitem">
+        <div class="jdot" style="background:var(--muted);box-shadow:none;animation:none;"></div>
+        <div class="jyear">2022</div>
+        <div class="jtitle">First Page — Learn by Failing</div>
+        <div class="jdesc">Launched my very first Instagram page with zero knowledge of how the platform works. Got banned shortly after for unknowingly violating rules. Embarrassing at the time — but it forced me to actually understand the game before playing it.</div>
+      </div>
+      <div class="jitem">
+        <div class="jdot"></div>
+        <div class="jyear">2023</div>
+        <div class="jtitle">@ashadits_ — First Real Page</div>
+        <div class="jdesc">Built my personal cricket page from zero. Over 1.5 years: <b>3,261 followers</b>, <b>10M+ views</b>, and <b>100+ reels</b>. This is where I truly learned content creation, consistency, and what an audience actually wants. Suspended July 2025 — painful, but the lessons stayed.</div>
+      </div>
+      <div class="jitem">
+        <div class="jdot"></div>
+        <div class="jyear">2024</div>
+        <div class="jtitle">CricLovex + The Mind Word</div>
+        <div class="jdesc">Applied everything learned and launched two pages simultaneously. <b>CricLovex</b> hit <b>10.1M on a single reel</b> and crossed <b>23M+ views in 90 days</b>. <b>The Mind Word</b> reached <b>1M+ views in 10 days</b>. Real income started — <b>₹20K+ total</b> through digital products and promotions.</div>
+      </div>
+      <div class="jitem">
+        <div class="jdot" style="background:var(--warm);box-shadow:0 0 12px rgba(255,179,71,.4);"></div>
+        <div class="jyear">2025</div>
+        <div class="jtitle">Scaling & Sharing</div>
+        <div class="jdesc">CricLovex crosses <b>23M views in 90 days</b>. The Mind Word grows to <b>3K+ followers</b>. Now focused on scaling both pages, launching <b>Content with Ash!</b> as a PDF/PPT guide, and helping others build pages that actually pay.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ══ CONTENT / CONTACT ══ -->
+<div class="wrap" id="content">
+  <div class="sec">
+    <div class="sec-tag reveal">Get In Touch</div>
+    <h2 class="sec-h reveal d1">Content <span style="color:var(--coral)">&amp; Contact</span></h2>
+    <div class="content-grid">
+
+      <!-- left: info blocks -->
+      <div class="content-info">
+        <div class="info-block reveal d1">
+          <div class="ib-label">About Content</div>
+          <div class="ib-title">What I Do</div>
+          <div class="ib-text">I create viral faceless content for Cricket and Motivation niches — reels, posts, and strategies built around organic reach. Open for brand deals, shoutouts, and collaborations.</div>
+        </div>
+
+        <div class="info-block reveal d2">
+          <div class="ib-label">My Pages</div>
+          <div class="ib-title">Find Me On Instagram</div>
+          <div class="ib-links">
+            <a href="https://www.instagram.com/cricl0vex" target="_blank" class="ib-link">
+              <span class="link-icon">🏏</span>
+              <div>
+                <div>CricLovex</div>
+                <div class="link-handle">@cricl0vex</div>
+              </div>
+              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
+            </a>
+            <a href="https://www.instagram.com/themindword_" target="_blank" class="ib-link">
+              <span class="link-icon">🧠</span>
+              <div>
+                <div>The Mind Word</div>
+                <div class="link-handle">@themindword_</div>
+              </div>
+              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
+            </a>
+            <a href="https://www.instagram.com/ashx" target="_blank" class="ib-link">
+              <span class="link-icon">⚡</span>
+              <div>
+                <div>AshX</div>
+                <div class="link-handle">@ashx</div>
+              </div>
+              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- right: contact form -->
+      <div class="contact-form-wrap reveal d2">
+        <div class="cf-title">Send a Message</div>
+        <div class="cf-sub">I'll get back to you as soon as possible.</div>
+
+        <form id="contactForm" onsubmit="handleFormSubmit(event)" novalidate>
+          <div class="form-group">
+            <label for="fname">Name</label>
+            <input type="text" id="fname" class="form-input" placeholder="Your name" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="femail">Email</label>
+            <input type="email" id="femail" class="form-input" placeholder="your@email.com" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="fmsg">Message</label>
+            <textarea id="fmsg" class="form-textarea" placeholder="Tell me what's on your mind..." required></textarea>
+          </div>
+          <div id="formError" style="display:none;color:var(--coral);font-size:12px;margin-bottom:12px;font-family:'Fira Code',monospace;"></div>
+          <button type="submit" class="btn-send" id="sendBtn">
+            Send Message <span class="arrow">→</span>
+          </button>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <span class="check-icon">✅</span>
+          <p><b>Message sent!</b><br>I'll get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="f-logo">Ash<span>X</span></div>
+  <div class="f-links">
+    <a href="https://www.instagram.com/cricl0vex" target="_blank">CricLovex</a>
+    <a href="https://www.instagram.com/themindword_" target="_blank">TheMindWord</a>
+    <a href="https://www.instagram.com/ashx" target="_blank">AshX</a>
+  </div>
+  <div class="f-copy">© 2025 AshX · Build Pages to Pay Bills</div>
+</footer>
+
+<!-- ══ BUY NOW MODAL ══ -->
+<div class="overlay" id="overlay" onclick="handleOC(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="m-close" onclick="closeModal()">✕</button>
+      <div class="m-tag">⚡ DIGITAL PRODUCT</div>
+      <div class="m-title">Content with Ash!</div>
+      <div class="m-sub">Complete guide to building a faceless Instagram page</div>
+    </div>
+    <div class="modal-body">
+      <div class="m-sec">What You'll Get</div>
+      <ul class="m-list">
+        <li><span class="m-dot"></span>Full PDF/PPT guide on building faceless Instagram pages</li>
+        <li><span class="m-dot"></span>Niche selection framework — pick the right niche every time</li>
+        <li><span class="m-dot"></span>Content strategy behind 23M+ organic views</li>
+        <li><span class="m-dot"></span>How to hit 98%+ reach to non-followers consistently</li>
+        <li><span class="m-dot"></span>Monetisation roadmap from ₹0 to ₹20K+</li>
+        <li><span class="m-dot"></span>Real analytics & screenshots from my actual pages</li>
+      </ul>
+      <div class="m-price-box">
+        <div>
+          <div class="m-price-num">Coming Soon</div>
+          <div class="m-price-note">Price to be announced shortly</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);text-align:right;">PDF/PPT<br>Instant Delivery</div>
+      </div>
+      <a href="#" class="m-pay" onclick="handlePay(event)">🛒 Proceed to Payment</a>
+      <p class="m-note">DM for early access →
+        <a href="https://www.instagram.com/themindword_" target="_blank">@themindword_</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+    /* ── NAV SCROLL + PROGRESS BAR + ACTIVE LINK ── */
+const nav         = document.getElementById('nav');
+const navProgress = document.getElementById('navProgress');
+const navItems    = document.querySelectorAll('.nav-item');
+const sections    = ['about','pages','content'].map(id => document.getElementById(id)).filter(Boolean);
+
+window.addEventListener('scroll', () => {
+  const scrollY   = window.scrollY;
+  const docH      = document.documentElement.scrollHeight - window.innerHeight;
+  const progress  = Math.min((scrollY / docH) * 100, 100);
+
+  // progress bar width
+  navProgress.style.width = progress + '%';
+
+  // scrolled class for glow line + bg
+  nav.classList.toggle('scrolled', scrollY > 40);
+
+  // active link based on section in viewport
+  let current = '';
+  sections.forEach(sec => {
+    if (scrollY >= sec.offsetTop - 100) current = sec.id;
+  });
+  navItems.forEach(a => {
+    const href = a.getAttribute('href').replace('#','');
+    a.classList.toggle('active', href === current);
+  });
+});
+
+/* ── MOBILE MENU ── */
+function toggleMenu() {
+  const hbg = document.getElementById('hbg');
+  const menu = document.getElementById('mobMenu');
+  hbg.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hbg').classList.remove('open');
+  document.getElementById('mobMenu').classList.remove('open');
+}
+window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+
+/* ── MODAL ── */
+function openModal() {
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+function handleOC(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function handlePay(e) {
+  e.preventDefault();
+  closeModal();
+  alert('Payment link coming soon!\nDM on Instagram @themindword_ for early access.');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── CONTACT FORM ── */
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const name    = document.getElementById('fname').value.trim();
+  const email   = document.getElementById('femail').value.trim();
+  const msg     = document.getElementById('fmsg').value.trim();
+  const errEl   = document.getElementById('formError');
+  const sendBtn = document.getElementById('sendBtn');
+
+  // Basic validation
+  if (!name || !email || !msg) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRx.test(email)) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  // Build mailto link — opens email client with prefilled message
+  const subject = encodeURIComponent('Message from ' + name + ' via AshX Portfolio');
+  const body    = encodeURIComponent(
+    'Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg
+  );
+  const mailto  = 'vipsofficial4488@gmail.com?subject=' + subject + '&body=' + body;
+
+  // Show loading state
+  sendBtn.textContent = 'Opening email...';
+  sendBtn.style.opacity = '.7';
+  sendBtn.disabled = true;
+
+  // Open mailto
+  window.location.href = mailto;
+
+  // After short delay show success
+  setTimeout(() => {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }, 1500);
+}
+
+/* ── SCROLL REVEAL (general) ── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => io.observe(el));
+
+/* ── JOURNEY TIMELINE ANIMATION ── */
+const journeyWrap = document.querySelector('.journey-wrap');
+const jItems = document.querySelectorAll('.jitem');
+
+// Animate the line first, then each item with staggered delay
+const journeyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Draw the line
+      journeyWrap.classList.add('line-in');
+
+      // Stagger each jitem
+      jItems.forEach((item, i) => {
+        setTimeout(() => {
+          item.classList.add('jitem-in');
+        }, 200 + i * 260);
+      });
+
+      journeyObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+if (journeyWrap) journeyObserver.observe(journeyWrap);
+
+/* ── REACH BARS — animate on scroll ── */
+const reachBars = document.querySelectorAll('.reach-bar-fill');
+const reachObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bar = entry.target;
+      const width = bar.getAttribute('data-width');
+      // slight delay for stagger feel
+      setTimeout(() => { bar.style.width = width + '%'; }, 300);
+      reachObserver.unobserve(bar);
+    }
+  });
+}, { threshold: 0.3 });
+reachBars.forEach(b => reachObserver.observe(b));
+
+/* ── CARD SUBTLE TILT on mousemove ── */
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = ((y - cy) / cy) * -5;
+    const rotY = ((x - cx) / cx) * 5;
+    card.style.transform = `translateY(-10px) scale(1.01) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    card.style.transition = 'transform .1s ease';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .35s cubic-bezier(.34,1.10,.64,1)';
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#' || href === '#0') return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    const y = target.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+});
+</script>
 </body>
 </html>

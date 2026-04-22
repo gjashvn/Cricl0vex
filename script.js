@@ -1,99 +1,181 @@
-  const teams = [
-    { name: "Chennai Super Kings",       url: "https://www.instagram.com/chennaiipl/",                    badge: "badge-csk",  emoji: "🟡" },
-    { name: "Mumbai Indians",            url: "https://www.instagram.com/mumbaiindians/",                 badge: "badge-mi",   emoji: "💙" },
-    { name: "Royal Challengers Bengaluru",url: "https://www.instagram.com/royalchallengers.bengaluru/",   badge: "badge-rcb",  emoji: "🔴" },
-    { name: "Kolkata Knight Riders",     url: "https://www.instagram.com/kkriders/",                      badge: "badge-kkr",  emoji: "🟣" },
-    { name: "Delhi Capitals",            url: "https://www.instagram.com/delhicapitals/",                 badge: "badge-dc",   emoji: "🔵" },
-    { name: "Punjab Kings",              url: "https://www.instagram.com/punjabkingsipl/",                badge: "badge-pbks", emoji: "❤️" },
-    { name: "Rajasthan Royals",          url: "https://www.instagram.com/rajasthanroyals/",               badge: "badge-rr",   emoji: "💗" },
-    { name: "Sunrisers Hyderabad",       url: "https://www.instagram.com/sunrisershyd/",                  badge: "badge-srh",  emoji: "🟠" },
-    { name: "Lucknow Super Giants",      url: "https://www.instagram.com/lucknowsupergiants/",            badge: "badge-lsg",  emoji: "🩵" },
-    { name: "Gujarat Titans",            url: "https://www.instagram.com/gujarat_titans/",                badge: "badge-gt",   emoji: "🏅" },
-  ];
+/* ── NAV SCROLL + PROGRESS BAR + ACTIVE LINK ── */
+const nav         = document.getElementById('nav');
+const navProgress = document.getElementById('navProgress');
+const navItems    = document.querySelectorAll('.nav-item');
+const sections    = ['about','pages','content'].map(id => document.getElementById(id)).filter(Boolean);
 
-  const players = [
-    { name: "Sportskeeda Cricket",   url: "https://www.instagram.com/sportskeedacricket" },
-    { name: "Cric Bold",             url: "https://www.instagram.com/cric_bold" },
-    { name: "Crick8Zone",            url: "https://www.instagram.com/crick8zone" },
-    { name: "The AK Cric",           url: "https://www.instagram.com/theakcric" },
-    { name: "Cricketeum",            url: "https://www.instagram.com/cricketeum" },
-    { name: "Cricket Gyan Official", url: "https://www.instagram.com/cricketgyanofficial" },
-    { name: "Cricxtasy Pod",         url: "https://www.instagram.com/cricxtasypod" },
-    { name: "Cricket Cult Official", url: "https://www.instagram.com/cricketcultofficial" },
-    { name: "Cricket Chamber",       url: "https://www.instagram.com/crictracker" },
-    { name: "Criclovers.in",         url: "https://www.instagram.com/criclovers.in" },
-    { name: "Cricketstan1",          url: "https://www.instagram.com/cricketstan1" },
-    { name: "Cric666 Official",      url: "https://www.instagram.com/cric666official" },
-  ];
+window.addEventListener('scroll', () => {
+  const scrollY   = window.scrollY;
+  const docH      = document.documentElement.scrollHeight - window.innerHeight;
+  const progress  = Math.min((scrollY / docH) * 100, 100);
 
-  // State
-  let activeTeams = [...teams];
-  let activePlayers = [...players];
+  // progress bar width
+  navProgress.style.width = progress + '%';
 
-  function render() {
-    renderList('teamsList', activeTeams, 'teams');
-    renderList('playersList', activePlayers, 'players');
-    updateCounts();
+  // scrolled class for glow line + bg
+  nav.classList.toggle('scrolled', scrollY > 40);
+
+  // active link based on section in viewport
+  let current = '';
+  sections.forEach(sec => {
+    if (scrollY >= sec.offsetTop - 100) current = sec.id;
+  });
+  navItems.forEach(a => {
+    const href = a.getAttribute('href').replace('#','');
+    a.classList.toggle('active', href === current);
+  });
+});
+
+/* ── MOBILE MENU ── */
+function toggleMenu() {
+  const hbg = document.getElementById('hbg');
+  const menu = document.getElementById('mobMenu');
+  hbg.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hbg').classList.remove('open');
+  document.getElementById('mobMenu').classList.remove('open');
+}
+window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+
+/* ── MODAL ── */
+function openModal() {
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+function handleOC(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function handlePay(e) {
+  e.preventDefault();
+  closeModal();
+  alert('Payment link coming soon!\nDM on Instagram @themindword_ for early access.');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── CONTACT FORM ── */
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const name    = document.getElementById('fname').value.trim();
+  const email   = document.getElementById('femail').value.trim();
+  const msg     = document.getElementById('fmsg').value.trim();
+  const errEl   = document.getElementById('formError');
+  const sendBtn = document.getElementById('sendBtn');
+
+  // Basic validation
+  if (!name || !email || !msg) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = 'block';
+    return;
   }
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRx.test(email)) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
 
-  function renderList(containerId, data, type) {
-    const container = document.getElementById(containerId);
-    const empty = document.getElementById(type === 'teams' ? 'teamsEmpty' : 'playersEmpty');
+  // Build mailto link — opens email client with prefilled message
+  const subject = encodeURIComponent('Message from ' + name + ' via AshX Portfolio');
+  const body    = encodeURIComponent(
+    'Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg
+  );
+  const mailto  = 'mailto:vipsofficial4488@gmail.com?subject=' + subject + '&body=' + body;
 
-    if (data.length === 0) {
-      container.innerHTML = '';
-      empty.style.display = 'block';
-      return;
+  // Show loading state
+  sendBtn.textContent = 'Opening email...';
+  sendBtn.style.opacity = '.7';
+  sendBtn.disabled = true;
+
+  // Open mailto
+  window.location.href = mailto;
+
+  // After short delay show success
+  setTimeout(() => {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }, 1500);
+}
+
+/* ── SCROLL REVEAL (general) ── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
     }
-    empty.style.display = 'none';
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => io.observe(el));
 
-    container.innerHTML = data.map((item, i) => {
-      const badgeClass = item.badge || '';
-      const emoji = item.emoji || '📸';
-      return `
-        <div class="list-item" id="item-${type}-${i}">
-          <div class="item-num">${i + 1}</div>
-          <a class="item-link" href="${item.url}" target="_blank" rel="noopener" title="Open ${item.name} on Instagram">
-            <div class="ig-icon ${badgeClass}">${item.badge ? emoji : '📷'}</div>
-            <span class="item-name">${item.name}</span>
-            <span class="item-arrow">↗</span>
-          </a>
-          <button class="btn-del" onclick="deleteItem('${type}', ${i})" title="Remove from list">×</button>
-        </div>
-      `;
-    }).join('');
-  }
+/* ── JOURNEY TIMELINE ANIMATION ── */
+const journeyWrap = document.querySelector('.journey-wrap');
+const jItems = document.querySelectorAll('.jitem');
 
-  function deleteItem(type, idx) {
-    const name = type === 'teams' ? activeTeams[idx].name : activePlayers[idx].name;
-    if (type === 'teams') activeTeams.splice(idx, 1);
-    else activePlayers.splice(idx, 1);
-    render();
-    showToast(`🗑️ Removed: ${name}`);
-  }
+// Animate the line first, then each item with staggered delay
+const journeyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Draw the line
+      journeyWrap.classList.add('line-in');
 
-  function openAll(type) {
-    const list = type === 'teams' ? activeTeams : activePlayers;
-    if (list.length === 0) { showToast('⚠️ No pages left in this section'); return; }
-    list.forEach(item => window.open(item.url, '_blank'));
-    showToast(`✅ Opened ${list.length} pages`);
-  }
+      // Stagger each jitem
+      jItems.forEach((item, i) => {
+        setTimeout(() => {
+          item.classList.add('jitem-in');
+        }, 200 + i * 260);
+      });
 
-  function updateCounts() {
-    document.getElementById('teamCount').textContent = activeTeams.length;
-    document.getElementById('playerCount').textContent = activePlayers.length;
-    document.getElementById('totalCount').textContent = activeTeams.length + activePlayers.length;
-    document.getElementById('teamBadge').textContent = activeTeams.length;
-    document.getElementById('playerBadge').textContent = activePlayers.length;
-  }
+      journeyObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
 
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
-  }
+if (journeyWrap) journeyObserver.observe(journeyWrap);
 
-  render();
+/* ── REACH BARS — animate on scroll ── */
+const reachBars = document.querySelectorAll('.reach-bar-fill');
+const reachObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bar = entry.target;
+      const width = bar.getAttribute('data-width');
+      // slight delay for stagger feel
+      setTimeout(() => { bar.style.width = width + '%'; }, 300);
+      reachObserver.unobserve(bar);
+    }
+  });
+}, { threshold: 0.3 });
+reachBars.forEach(b => reachObserver.observe(b));
+
+/* ── CARD SUBTLE TILT on mousemove ── */
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = ((y - cy) / cy) * -5;
+    const rotY = ((x - cx) / cx) * 5;
+    card.style.transform = `translateY(-10px) scale(1.01) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    card.style.transition = 'transform .1s ease';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .35s cubic-bezier(.34,1.10,.64,1)';
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#' || href === '#0') return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    const y = target.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+});

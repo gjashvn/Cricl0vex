@@ -6,7 +6,7 @@ const toggleText     = document.getElementById('toggleText');
 const linkCountLabel = document.getElementById('linkCount');
 
 // ── Predefined WhatsApp number (country code + number, no spaces or +) ──
-const WA_NUMBER = '8597849566';
+const WA_NUMBER = '918597849566';
 
 let savedLinks = JSON.parse(localStorage.getItem('vaultPages')) || [];
 

@@ -5,19 +5,31 @@ const toggleIcon     = document.getElementById('toggleIcon');
 const toggleText     = document.getElementById('toggleText');
 const linkCountLabel = document.getElementById('linkCount');
 
-// ── Predefined WhatsApp number (country code + number, no spaces or +) ──
+// ── Predefined WhatsApp number: +91 85978 49566 ───────────────────────────
 const WA_NUMBER = '918597849566';
 
 let savedLinks = JSON.parse(localStorage.getItem('vaultPages')) || [];
 
-// ── Toggle form panel ──────────────────────────────────────────────────────
+// ── Open WhatsApp — uses anchor click to bypass popup blockers ────────────
+function openWA(msg) {
+    const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// ── Toggle form panel ─────────────────────────────────────────────────────
 function toggleVault() {
     const isCollapsed = formPanel.classList.toggle('collapsed');
     toggleText.innerText = isCollapsed ? 'Open Editor' : 'Close Editor';
     toggleIcon.className = isCollapsed ? 'fas fa-plus' : 'fas fa-times';
 }
 
-// ── Render all saved cards ─────────────────────────────────────────────────
+// ── Render all saved cards ────────────────────────────────────────────────
 function displayLinks() {
     linksContainer.innerHTML = '';
     linkCountLabel.innerText = savedLinks.length;
@@ -69,12 +81,15 @@ function displayLinks() {
     });
 }
 
-// ── Build WhatsApp message: all fields ───────────────────────────────────
+// ── Build WhatsApp message ────────────────────────────────────────────────
 function buildWAMessage(pageName, pageLink, followers, reelLink) {
-    return `*Page Name* - ${pageName}\n*Page Link* - ${pageLink}\n*Followers* - ${followers}\n*1st Reel Link* - ${reelLink}`;
+    return '*Page Name* - ' + pageName +
+        '\n*Page Link* - ' + pageLink +
+        '\n*Followers* - ' + followers +
+        '\n*1st Reel Link* - ' + reelLink;
 }
 
-// ── Send from form (uses predefined WA number) ────────────────────────────
+// ── Send from form button ─────────────────────────────────────────────────
 function sendToWhatsApp() {
     const pageName  = document.getElementById('pageName').value.trim();
     const pageLink  = document.getElementById('pageLink').value.trim();
@@ -86,15 +101,13 @@ function sendToWhatsApp() {
         return;
     }
 
-    const msg = buildWAMessage(pageName, pageLink, followers, reelLink);
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    openWA(buildWAMessage(pageName, pageLink, followers, reelLink));
 }
 
-// ── Share a saved card via WhatsApp ───────────────────────────────────────
+// ── Share a saved card ────────────────────────────────────────────────────
 window.shareCard = (index) => {
     const item = savedLinks[index];
-    const msg  = buildWAMessage(item.pageName, item.pageLink, item.followers, item.reelLink);
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    openWA(buildWAMessage(item.pageName, item.pageLink, item.followers, item.reelLink));
 };
 
 // ── Save / Update on form submit ──────────────────────────────────────────
@@ -117,14 +130,12 @@ linkForm.addEventListener('submit', (e) => {
     }
 
     localStorage.setItem('vaultPages', JSON.stringify(savedLinks));
-
-    // Auto-send to WhatsApp on every save
-    const msg = buildWAMessage(pageName, pageLink, followers, reelLink);
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-
     linkForm.reset();
     displayLinks();
     toggleVault();
+
+    // Send to WhatsApp AFTER form actions (avoids popup block on async)
+    openWA(buildWAMessage(pageName, pageLink, followers, reelLink));
 });
 
 // ── Delete ────────────────────────────────────────────────────────────────

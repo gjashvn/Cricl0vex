@@ -1,181 +1,152 @@
-/* ── NAV SCROLL + PROGRESS BAR + ACTIVE LINK ── */
-const nav         = document.getElementById('nav');
-const navProgress = document.getElementById('navProgress');
-const navItems    = document.querySelectorAll('.nav-item');
-const sections    = ['about','pages','content'].map(id => document.getElementById(id)).filter(Boolean);
+const linkForm       = document.getElementById('linkForm');
+const linksContainer = document.getElementById('linksContainer');
+const formPanel      = document.getElementById('formPanel');
+const toggleIcon     = document.getElementById('toggleIcon');
+const toggleText     = document.getElementById('toggleText');
+const linkCountLabel = document.getElementById('linkCount');
 
-window.addEventListener('scroll', () => {
-  const scrollY   = window.scrollY;
-  const docH      = document.documentElement.scrollHeight - window.innerHeight;
-  const progress  = Math.min((scrollY / docH) * 100, 100);
+// ── Predefined WhatsApp number (country code + number, no spaces or +) ──
+const WA_NUMBER = '8597849566';
 
-  // progress bar width
-  navProgress.style.width = progress + '%';
+let savedLinks = JSON.parse(localStorage.getItem('vaultPages')) || [];
 
-  // scrolled class for glow line + bg
-  nav.classList.toggle('scrolled', scrollY > 40);
-
-  // active link based on section in viewport
-  let current = '';
-  sections.forEach(sec => {
-    if (scrollY >= sec.offsetTop - 100) current = sec.id;
-  });
-  navItems.forEach(a => {
-    const href = a.getAttribute('href').replace('#','');
-    a.classList.toggle('active', href === current);
-  });
-});
-
-/* ── MOBILE MENU ── */
-function toggleMenu() {
-  const hbg = document.getElementById('hbg');
-  const menu = document.getElementById('mobMenu');
-  hbg.classList.toggle('open');
-  menu.classList.toggle('open');
-}
-function closeMenu() {
-  document.getElementById('hbg').classList.remove('open');
-  document.getElementById('mobMenu').classList.remove('open');
-}
-window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
-
-/* ── MODAL ── */
-function openModal() {
-  document.getElementById('overlay').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-}
-function handleOC(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
-function handlePay(e) {
-  e.preventDefault();
-  closeModal();
-  alert('Payment link coming soon!\nDM on Instagram @themindword_ for early access.');
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-/* ── CONTACT FORM ── */
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const name    = document.getElementById('fname').value.trim();
-  const email   = document.getElementById('femail').value.trim();
-  const msg     = document.getElementById('fmsg').value.trim();
-  const errEl   = document.getElementById('formError');
-  const sendBtn = document.getElementById('sendBtn');
-
-  // Basic validation
-  if (!name || !email || !msg) {
-    errEl.textContent = 'Please fill in all fields.';
-    errEl.style.display = 'block';
-    return;
-  }
-  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRx.test(email)) {
-    errEl.textContent = 'Please enter a valid email address.';
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  // Build mailto link — opens email client with prefilled message
-  const subject = encodeURIComponent('Message from ' + name + ' via AshX Portfolio');
-  const body    = encodeURIComponent(
-    'Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg
-  );
-  const mailto  = 'mailto:vipsofficial4488@gmail.com?subject=' + subject + '&body=' + body;
-
-  // Show loading state
-  sendBtn.textContent = 'Opening email...';
-  sendBtn.style.opacity = '.7';
-  sendBtn.disabled = true;
-
-  // Open mailto
-  window.location.href = mailto;
-
-  // After short delay show success
-  setTimeout(() => {
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-  }, 1500);
+// ── Toggle form panel ──────────────────────────────────────────────────────
+function toggleVault() {
+    const isCollapsed = formPanel.classList.toggle('collapsed');
+    toggleText.innerText = isCollapsed ? 'Open Editor' : 'Close Editor';
+    toggleIcon.className = isCollapsed ? 'fas fa-plus' : 'fas fa-times';
 }
 
-/* ── SCROLL REVEAL (general) ── */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      io.unobserve(e.target);
+// ── Render all saved cards ─────────────────────────────────────────────────
+function displayLinks() {
+    linksContainer.innerHTML = '';
+    linkCountLabel.innerText = savedLinks.length;
+
+    if (savedLinks.length === 0) {
+        linksContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <p>No pages saved yet. Open the editor to add one!</p>
+            </div>`;
+        return;
     }
-  });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => io.observe(el));
 
-/* ── JOURNEY TIMELINE ANIMATION ── */
-const journeyWrap = document.querySelector('.journey-wrap');
-const jItems = document.querySelectorAll('.jitem');
+    savedLinks.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="page-name">${item.pageName}</div>
+                <div class="followers-badge"><i class="fas fa-users"></i> ${item.followers}</div>
+            </div>
+            <div class="card-links">
+                <a href="${item.pageLink}" target="_blank" class="link-row">
+                    <i class="fas fa-link"></i>
+                    <span>Page Link</span>
+                    <i class="fas fa-external-link-alt link-arrow"></i>
+                </a>
+                <a href="${item.reelLink}" target="_blank" class="link-row reel">
+                    <i class="fas fa-film"></i>
+                    <span>1st Reel</span>
+                    <i class="fas fa-external-link-alt link-arrow"></i>
+                </a>
+            </div>
+            <div class="card-footer">
+                <button onclick="shareCard(${index})" class="icon-btn wa-share" title="Send to WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </button>
+                <div>
+                    <button onclick="editLink(${index})" class="icon-btn" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteLink(${index})" class="icon-btn delete" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        linksContainer.appendChild(card);
+    });
+}
 
-// Animate the line first, then each item with staggered delay
-const journeyObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Draw the line
-      journeyWrap.classList.add('line-in');
+// ── Build WhatsApp message: all fields ───────────────────────────────────
+function buildWAMessage(pageName, pageLink, followers, reelLink) {
+    return `*Page Name* - ${pageName}\n*Page Link* - ${pageLink}\n*Followers* - ${followers}\n*1st Reel Link* - ${reelLink}`;
+}
 
-      // Stagger each jitem
-      jItems.forEach((item, i) => {
-        setTimeout(() => {
-          item.classList.add('jitem-in');
-        }, 200 + i * 260);
-      });
+// ── Send from form (uses predefined WA number) ────────────────────────────
+function sendToWhatsApp() {
+    const pageName  = document.getElementById('pageName').value.trim();
+    const pageLink  = document.getElementById('pageLink').value.trim();
+    const followers = document.getElementById('followers').value.trim();
+    const reelLink  = document.getElementById('reelLink').value.trim();
 
-      journeyObserver.unobserve(entry.target);
+    if (!pageName || !pageLink || !followers || !reelLink) {
+        alert('Please fill in all fields before sending to WhatsApp.');
+        return;
     }
-  });
-}, { threshold: 0.12 });
 
-if (journeyWrap) journeyObserver.observe(journeyWrap);
+    const msg = buildWAMessage(pageName, pageLink, followers, reelLink);
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
-/* ── REACH BARS — animate on scroll ── */
-const reachBars = document.querySelectorAll('.reach-bar-fill');
-const reachObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const bar = entry.target;
-      const width = bar.getAttribute('data-width');
-      // slight delay for stagger feel
-      setTimeout(() => { bar.style.width = width + '%'; }, 300);
-      reachObserver.unobserve(bar);
-    }
-  });
-}, { threshold: 0.3 });
-reachBars.forEach(b => reachObserver.observe(b));
+// ── Share a saved card via WhatsApp ───────────────────────────────────────
+window.shareCard = (index) => {
+    const item = savedLinks[index];
+    const msg  = buildWAMessage(item.pageName, item.pageLink, item.followers, item.reelLink);
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+};
 
-/* ── CARD SUBTLE TILT on mousemove ── */
-document.querySelectorAll('[data-tilt]').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotX = ((y - cy) / cy) * -5;
-    const rotY = ((x - cx) / cx) * 5;
-    card.style.transform = `translateY(-10px) scale(1.01) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    card.style.transition = 'transform .1s ease';
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-    card.style.transition = 'transform .35s cubic-bezier(.34,1.10,.64,1)';
-  });
-});
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const href = a.getAttribute('href');
-    if (href === '#' || href === '#0') return;
-    const target = document.querySelector(href);
-    if (!target) return;
+// ── Save / Update on form submit ──────────────────────────────────────────
+linkForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const y = target.getBoundingClientRect().top + window.scrollY - 70;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  });
+
+    const pageName  = document.getElementById('pageName').value.trim();
+    const followers = document.getElementById('followers').value.trim();
+    const pageLink  = document.getElementById('pageLink').value.trim();
+    const reelLink  = document.getElementById('reelLink').value.trim();
+    const editIndex = document.getElementById('editIndex').value;
+
+    const entry = { pageName, followers, pageLink, reelLink };
+
+    if (editIndex === '') {
+        savedLinks.unshift(entry);
+    } else {
+        savedLinks[editIndex] = entry;
+        document.getElementById('editIndex').value = '';
+    }
+
+    localStorage.setItem('vaultPages', JSON.stringify(savedLinks));
+
+    // Auto-send to WhatsApp on every save
+    const msg = buildWAMessage(pageName, pageLink, followers, reelLink);
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    linkForm.reset();
+    displayLinks();
+    toggleVault();
 });
+
+// ── Delete ────────────────────────────────────────────────────────────────
+window.deleteLink = (index) => {
+    if (confirm('Delete this page entry?')) {
+        savedLinks.splice(index, 1);
+        localStorage.setItem('vaultPages', JSON.stringify(savedLinks));
+        displayLinks();
+    }
+};
+
+// ── Edit ──────────────────────────────────────────────────────────────────
+window.editLink = (index) => {
+    const item = savedLinks[index];
+    document.getElementById('pageName').value  = item.pageName;
+    document.getElementById('followers').value = item.followers;
+    document.getElementById('pageLink').value  = item.pageLink;
+    document.getElementById('reelLink').value  = item.reelLink;
+    document.getElementById('editIndex').value = index;
+    if (formPanel.classList.contains('collapsed')) toggleVault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ── Init ──────────────────────────────────────────────────────────────────
+displayLinks();

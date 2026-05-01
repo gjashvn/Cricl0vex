@@ -1,488 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AshX — Build Pages to Pay Bills</title>
-<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>< L ! N K S ></title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<!-- ══ SCROLL PROGRESS BAR ══ -->
-<div class="nav-progress" id="navProgress"></div>
+<div class="wrapper">
+    <header>
+        <h1>L!nk4U</h1>
+        <p style="color: var(--text-dim)">Money makes you happy..hahaha!</p>
+    </header>
 
-<!-- ══ NAVBAR Section  -->
-<nav id="nav">
-  <div class="nav-glow-line"></div>
-
-  <a href="#" class="nav-logo">
-    <span class="logo-ash">Ash</span><span class="logo-x">X</span>
-    <span class="logo-dot"></span>
-  </a>
-
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about"   class="nav-item" data-label="About">About</a></li>
-    <li><a href="#pages"   class="nav-item" data-label="Pages">Pages</a></li>
-    <li><a href="#content" class="nav-item" data-label="Content">Content</a></li>
-    <li>
-      <a href="#" class="nav-cta" onclick="openModal();return false;">
-        <span class="cta-text">Buy Now</span>
-        <span class="cta-shine"></span>
-      </a>
-    </li>
-  </ul>
-
-  <div class="hamburger" id="hbg" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
-
-<div class="mob-menu" id="mobMenu">
-  <a href="#about"   onclick="closeMenu()" class="mob-link">
-    <span class="mob-num">01</span><span>About</span><span class="mob-arr">→</span>
-  </a>
-  <a href="#pages"   onclick="closeMenu()" class="mob-link">
-    <span class="mob-num">02</span><span>Pages</span><span class="mob-arr">→</span>
-  </a>
-  <a href="#content" onclick="closeMenu()" class="mob-link">
-    <span class="mob-num">03</span><span>Content</span><span class="mob-arr">→</span>
-  </a>
-  <a href="#" onclick="openModal();closeMenu();return false;" class="mob-link mob-buy">
-    <span class="mob-num">💎</span><span>Start Learning with Ash</span><span class="mob-arr">→</span>
-  </a>
-</div>
-
-<!--HERO Section -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-dots"></div>
-
-  <div class="hero-inner">
-    <div class="hero-eyebrow">LEARN - BUILD - EARN</div>
-
-    <h1 class="hero-name">ASH<span class="x">X</span></h1>
-    <p class="hero-slogan">
-      <span class="w1">Build</span>
-      <span class="w2">Pages</span>
-      <span class="w3">to</span>
-      <span class="w4">Pay</span>
-      <span class="w5">Bills</span>
-    </p>
-
-    <div class="hero-btns">
-      <button class="btn btn-buy-hero" onclick="openModal()">Start Larning with Ash X↗</button>
-      <a href="#about" class="btn btn-buy-hero">Know My Story ↓</a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="hs"><span class="hs-val">5K+</span><div class="hs-lbl">Followers</div></div>
-      <div class="hs"><span class="hs-val">50M+</span><div class="hs-lbl">Total Views</div></div>
-      <div class="hs"><span class="hs-val">₹20K+</span><div class="hs-lbl">Earned</div></div>
-      <div class="hs"><span class="hs-val">3+</span><div class="hs-lbl">Pages Built</div></div>
-    </div>
-</section>
-
-<!-- TICKER  -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <div class="ti">AshX</div>
-    <div class="ti">Build Pages to Pay Bills</div>
-    <div class="ti">CricLovex</div>
-    <div class="ti">The Mind Word</div>
-    <div class="ti">₹20K+ Earned</div>
-    <div class="ti">AshX</div>
-    <div class="ti">Build Pages to Pay Bills</div>
-    <div class="ti">CricLovex</div>
-    <div class="ti">The Mind Word</div>
-    <div class="ti">₹20K+ Earned</div>
-  </div>
-</div>
-
-<!-- ABOUT Section -->
-<div class="wrap" id="about">
-  <div class="sec">
-    <div class="sec-tag reveal">About AshX</div>
-    <h2 class="sec-h reveal d1">Who Is <span style="color:var(--coral)">AshX?</span></h2>
-
-    <div class="about-text reveal-left" style="max-width:680px;margin-bottom:36px;">
-      <p>I'm <b>Rathod Ashvin</b> from Gujarat — a self-taught Instagram creator who builds <span class="hl">faceless pages</span> from scratch. No team. No budget. Just consistency and the hunger to learn.</p>
-      <p>Started in <b>2022</b> with zero knowledge. My first page <b>@ashadits_</b> grew to 3.4K followers before it got banned. That failure taught me the most. Instead of quitting, I used the earnings to buy my first products and kept going.</p>
-      <p>I later tried a football page (Goalxnews) but it didn't work. So I rebranded it to <b>CricLovex</b>. In 2025, I launched my second page — <b>The Mind Word</b>.</p>
-      <p>Today I run both pages. My cricket page <b>CricLovex</b> alone crossed <span class="hl">23M+ views in 30 days</span> (March-April 2026)</p>
-    </div>
-
-    <div class="about-cards reveal d1">
-      <div class="about-card">
-        <div class="ac-label">The Struggle</div>
-        <div class="ac-text">Started with nothing — no mentor, no money, no guidance. Got pages banned and made every mistake possible. That's why I now understand what actually works.</div>
-      </div>
-      <div class="about-card">
-        <div class="ac-label">The Breakthrough</div>
-        <div class="ac-text">After my first page got banned, I applied everything I learned and built two stronger pages in different niches.</div>
-      </div>
-      <div class="about-card">
-        <div class="ac-label">The Goal</div>
-        <div class="ac-text">Grow both pages to <b>10K+ followers</b>, create a digital guide, and prove that anyone can build a profitable faceless Instagram page — no face required.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!-- Instagram Pages Section! -->
-<div class="wrap" id="pages">
-  <div class="sec">
-    <div class="sec-tag reveal">Active Pages</div>
-    <h2 class="sec-h reveal d1">My <span style="color:var(--coral)">Pages</span></h2>
-    <div class="pages-grid">
-
-      <!-- CARD 1: CricLovex -->
-      <div class="pcard reveal d1" data-tilt>
-        <div class="pcard-glow"></div>
-        <div class="pcard-top">
-          <div class="picon picon-anim">🏏</div>
-          <div>
-            <div class="phandle">@cricl0vex</div>
-            <div class="pname">CricLovex</div>
-          </div>
-          <span class="pcard-badge">Active</span>
-        </div>
-        <div class="pcard-body">
-          <p class="pdesc">Home of Cricket Lovers — Memes, Breaking News & IPL Updates!</p>
-          <div class="pmetrics">
-            <div class="pm">
-              <span class="pm-val count-up" data-target="2000" data-suffix="K+">2K+</span>
-              <span class="pm-lbl">Followers</span>
-            </div>
-            <div class="pm pm-highlight">
-              <span class="pm-val count-up" data-target="23" data-suffix="M+">23M+</span>
-              <span class="pm-lbl">Views 30Days</span>
-            </div>
-            <div class="pm">
-              <span class="pm-val">6.6M+</span>
-              <span class="pm-lbl">Reached</span>
-            </div>
-            <div class="pm pm-highlight">
-              <span class="pm-val">98.4%</span>
-              <span class="pm-lbl">Non-Follower</span>
-            </div>
-          </div>
-          <div class="reach-bar-wrap">
-            <div class="reach-bar-label">
-              <span>Non-follower reach</span>
-              <span class="reach-pct">98.4%</span>
-            </div>
-            <div class="reach-bar-track">
-              <div class="reach-bar-fill" data-width="98.4"></div>
-            </div>
-          </div>
-          <div class="pchips">
-            <span class="pchip">Cricket</span>
-            <span class="pchip">Memes</span>
-            <span class="pchip">IPL</span>
-            <span class="pchip">News</span>
-          </div>
-        </div>
-        <div class="pcard-foot">
-          <a href="https://www.instagram.com/cricl0vex" target="_blank" class="plink">
-            <span class="plink-dot"></span>
-            Go to CRICLOVEX ↗
-          </a>
-        </div>
-      </div>
-
-      <!-- CARD 2: The Mind Word -->
-      <div class="pcard reveal d2" data-tilt>
-        <div class="pcard-glow"></div>
-        <div class="pcard-top">
-          <div class="picon picon-anim">🧠</div>
-          <div>
-            <div class="phandle">@themindword_</div>
-            <div class="pname">Mind Word</div>
-          </div>
-          <span class="pcard-badge">Growing</span>
-        </div>
-        <div class="pcard-body">
-          <p class="pdesc">Mindset · Motivation · Psychology — Powerful words, real discipline</p>
-          <div class="pmetrics">
-            <div class="pm">
-              <span class="pm-val">3K+</span>
-              <span class="pm-lbl">Followers</span>
-            </div>
-            <div class="pm pm-highlight">
-              <span class="pm-val">1M+</span>
-              <span class="pm-lbl">Views 10d</span>
-            </div>
-            <div class="pm">
-              <span class="pm-val">307K+</span>
-              <span class="pm-lbl">Reached</span>
-            </div>
-            <div class="pm pm-highlight">
-              <span class="pm-val">99.8%</span>
-              <span class="pm-lbl">Non-Follower</span>
-            </div>
-          </div>
-          <div class="reach-bar-wrap">
-            <div class="reach-bar-label">
-              <span>Non-follower reach</span>
-              <span class="reach-pct">99.8%</span>
-            </div>
-            <div class="reach-bar-track">
-              <div class="reach-bar-fill" data-width="99.8"></div>
-            </div>
-          </div>
-          <div class="pchips">
-            <span class="pchip">Mindset</span>
-            <span class="pchip"> Psychology</span>
-            <span class="pchip">Motivation</span>
-          </div>
-        </div>
-        <div class="pcard-foot">
-          <a href="https://www.instagram.com/themindword_" target="_blank" class="plink">
-            <span class="plink-dot"></span>
-            Go to MindWord ↗
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="past-row reveal">
-      <span class="past-pill">PAST PAGE</span>
-      <div>
-        <div class="past-name">@ashadits_ — 2023 to July 2025</div>
-        <p class="past-text">This one is My Favourite Page!💎 Built from absolute zero to <b>3,261 followers</b> with <b>10M+ total views</b> and <b>100+ reels</b> over 1.5 years — all organic, no paid promotion. Covered Cricket, IPL news, and viral sports content. This page was my real classroom: I learned content strategy, audience behavior, posting consistency, and what it actually takes to grow on Instagram. Suspended in July 2025 for a policy violation — one of the toughest moments in this journey. But every lesson, every mistake, and every win from @ashadits_ directly shaped how CricLovex and The Mind Word were built.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!--EARNINGS Section!-->
-<div class="wrap">
-  <div class="sec">
-    <div class="sec-tag reveal">Revenue</div>
-    <h2 class="sec-h reveal d1">Total <span style="color:var(--coral)">Earnings</span></h2>
-
-    <div class="earn-layout reveal-scale">
-
-      <div class="earn-left">
-        <div class="earn-amount-wrap">
-          <div class="earn-currency">₹</div>
-          <div class="earn-number">20,000<span class="earn-plus">+</span></div>
-        </div>
-        <p class="earn-tagline">Earned across all pages!</p>
-        <div class="earn-since">
-          <span class="earn-since-dot"></span>
-          Since 2022 · Still Growing
-        </div>
-      </div>
-
-      <div class="earn-divider"></div>
-
-      <div class="earn-right">
-        <div class="earn-sources-label">Earned from</div>
-        <div class="earn-sources">
-          <div class="earn-source">
-            <div class="es-icon">🚀</div>
-            <div class="es-info">
-              <div class="es-name">Instagram/Youtube</div>
-              <div class="es-desc">Logo & Story Pramotions</div>
-            </div>
-          </div>
-          <div class="earn-source">
-            <div class="es-icon">🧑‍💻</div>
-            <div class="es-info">
-              <div class="es-name">Digital Services</div>
-              <div class="es-desc">IMG/VID Editing</div>
-            </div>
-          </div>
-        </div>
-
-        <button class="earn-cta" onclick="openModal()">
-          <span class="earn-cta-icon"></span>
-          <span class="earn-cta-text">Start Larning</span>
-          <span class="earn-cta-arrow">→</span>
+    <div class="controls">
+        <div class="stats-badge"><span id="linkCount">0</span> Pages Stored</div>
+        <button class="btn-toggle" onclick="toggleVault()">
+            <i id="toggleIcon" class="fas fa-plus"></i>
+            <span id="toggleText">Open Editor</span>
         </button>
-      </div>
-
     </div>
-  </div>
+
+    <div id="formPanel" class="collapsed">
+        <div class="glass-panel">
+            <form id="linkForm" class="input-grid">
+                <input type="hidden" id="editIndex">
+
+                <div class="field">
+                    <label><i class="fas fa-user"></i> PAGE NAME</label>
+                    <input type="text" id="pageName" placeholder="e.g. Funny Vibes" required>
+                </div>
+
+                <div class="field">
+                    <label><i class="fas fa-users"></i> FOLLOWERS</label>
+                    <input type="text" id="followers" placeholder="e.g. 50K" required>
+                </div>
+
+                <div class="field full-row">
+                    <label><i class="fas fa-link"></i> PAGE LINK</label>
+                    <input type="url" id="pageLink" placeholder="https://instagram.com/yourpage" required>
+                </div>
+
+                <div class="field full-row">
+                    <label><i class="fas fa-film"></i> 1ST REEL LINK</label>
+                    <input type="url" id="reelLink" placeholder="https://instagram.com/reel/..." required>
+                </div>
+
+                <div class="btn-row full-row">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> SAVE TO VAULT
+                    </button>
+                    <button type="button" class="btn-whatsapp" onclick="sendToWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> Send to WhatsApp
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="linksContainer" class="links-container"></div>
 </div>
 
-<div class="sep"></div>
-
-<!--JOURNEY Section -->
-<div class="wrap" id="journey">
-  <div class="sec">
-    <div class="sec-tag reveal">Timeline</div>
-    <h2 class="sec-h reveal d1">The <span style="color:var(--coral)">Journey</span></h2>
-    
-    <div class="journey-wrap">
-      <div class="jitem">
-        <div class="jdot" ></div>
-        <div class="jyear">2022</div>
-        <div class="jtitle">The Beginning — Learning by Failing</div>
-        <div class="jdesc">Started my Instagram journey with zero knowledge. Launched my very first page and got it banned for breaking rules I didn't even know existed. Instead of quitting, I decided to understand the platform properly.</div>
-      </div>
-      <div class="jitem">
-        <div class="jdot"></div>
-        <div class="jyear">2023</div>
-        <div class="jtitle">@ashadits_ — First Real Growth</div>
-        <div class="jdesc">Built my first proper page from scratch. Grew it to <b>3.4K followers</b> with <b>10M+ views</b>. Learned content creation, consistency, and audience psychology. This page was later banned in 2025 — but the lessons became my foundation.</div>
-      </div>
-      <div class="jitem">
-        <div class="jdot"></div>
-        <div class="jyear">2024</div>
-        <div class="jtitle">Rebranding & New Experiments</div>
-        <div class="jdesc">Started a football page (Goalxnews) but it didn't click. Rebranded it into <b>CricLovex</b>. Began applying everything I had learned from previous failures.</div>
-      </div>
-      <div class="jitem">
-        <div class="jdot"></div>
-        <div class="jyear">2025</div>
-        <div class="jtitle">Breakthrough Year</div>
-        <div class="jdesc">Launched <b>The Mind Word</b> — my second faceless page. <b>CricLovex</b> exploded with <b>23M+ views in 90 days</b> and one reel crossing <b>10.1M views organically</b>. Started earning real income through digital products and promotions.</div>
-      </div>
-      <div class="jitem">
-        <div class="jdot" style="background:var(--warm);box-shadow:0 0 12px rgba(255,179,71,.4);"></div>
-        <div class="jyear">Now</div>
-        <div class="jtitle">Scaling & Giving Back</div>
-        <div class="jdesc">Running two successful pages in different niches. Focused on scaling both to 10K+ followers, creating my first digital guide <b>"Content with Ash"</b>, and helping others build profitable faceless pages.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!--CONTACT — Instagram links + Email only, NO form -->
-<div class="wrap" id="content">
-  <div class="sec">
-    <div class="sec-tag reveal">Get In Touch</div>
-    <h2 class="sec-h reveal d1">Content with <span style="color:var(--coral)">Ashx</span></h2>
-    <div class="content-grid">
-
-      <!-- left: info blocks -->
-      <div class="content-info">
-        <div class="info-block reveal d1">
-          <div class="ib-label">About Content</div>
-          <div class="ib-title">What I Do</div>
-          <div class="ib-text">I create viral faceless content for Cricket and Motivation niches — reels, posts, and strategies built around organic reach. Open for brand deals, shoutouts, and collaborations.</div>
-        </div>
-
-         <div class="info-block reveal d3">
-          <div class="ib-label">Direct Email</div>
-          <div class="ib-title">Send Me a Mail</div>
-          <div class="ib-text" style="margin-bottom:14px;">For brand deals, collaborations or any inquiry — email me directly.</div>
-          <a href="mailto:vipsofficial4488@gmail.com" class="ib-link" style="text-decoration:none;">
-            <span class="link-icon">✉️</span>
-            <div>
-              <div>Email Me</div>
-              <div class="link-handle">vipsofficial4488@gmail.com</div>
-            </div>
-            <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
-          </a>
-        </div>
-
-        <div class="info-block reveal d2">
-          <div class="ib-label">My Pages</div>
-          <div class="ib-title">Find Me On Instagram</div>
-          <div class="ib-links">
-            <a href="https://www.instagram.com/cricl0vex" target="_blank" class="ib-link">
-              <span class="link-icon">🏏</span>
-              <div>
-                <div>Cric Lovex</div>
-                <div class="link-handle">@cricl0vex</div>
-              </div>
-              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
-            </a>
-            <a href="https://www.instagram.com/themindword_" target="_blank" class="ib-link">
-              <span class="link-icon">🧠</span>
-              <div>
-                <div>The Mind Word</div>
-                <div class="link-handle">@themindword_</div>
-              </div>
-              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
-            </a>
-            <a href="https://www.instagram.com/theash.x" target="_blank" class="ib-link">
-              <span class="link-icon">⚡</span>
-              <div>
-                <div>Ash X</div>
-                <div class="link-handle">@theash.x</div>
-              </div>
-              <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Email block -->
-        <!-- <div class="info-block reveal d3">
-          <div class="ib-label">Direct Email</div>
-          <div class="ib-title">Send Me a Mail</div>
-          <div class="ib-text" style="margin-bottom:14px;">For brand deals, collaborations or any inquiry — email me directly.</div>
-          <a href="mailto:vipsofficial4488@gmail.com" class="ib-link" style="text-decoration:none;">
-            <span class="link-icon">✉️</span>
-            <div>
-              <div>Email Me</div>
-              <div class="link-handle">vipsofficial4488@gmail.com</div>
-            </div>
-            <span style="margin-left:auto;color:var(--muted);font-size:11px;">↗</span>
-          </a>
-        </div> -->
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-  <div class="f-logo">Ash<span>X</span></div>
-  <div class="f-links">
-    <a href="https://www.instagram.com/theash.x" target="_blank">AshX</a>
-    <a href="https://www.instagram.com/cricl0vex" target="_blank">CricLovex</a>
-    <a href="https://www.instagram.com/themindword_" target="_blank">TheMindWord</a>
-  </div>
-  <div class="f-copy">© 2025 AshX · Build Pages to Pay Bills</div>
-</footer>
-
-<!-- ══ BUY NOW MODAL ══ -->
-<div class="overlay" id="overlay" onclick="handleOC(event)">
-  <div class="modal">
-    <div class="modal-head">
-      <button class="m-close" onclick="closeModal()">✕</button>
-      <div class="m-tag">⚡ DIGITAL PRODUCT</div>
-      <div class="m-title">Content with Ash!</div>
-      <div class="m-sub">Complete guide to building a faceless Instagram page</div>
-    </div>
-    <div class="modal-body">
-      <div class="m-sec">What You'll Get</div>
-      <ul class="m-list">
-        <li><span class="m-dot"></span>Full PDF/PPT guide on building faceless Instagram pages</li>
-        <li><span class="m-dot"></span>Niche selection framework — pick the right niche every time</li>
-        <li><span class="m-dot"></span>Content strategy behind 23M+ organic views</li>
-        <li><span class="m-dot"></span>How to hit 98%+ reach to non-followers consistently</li>
-        <li><span class="m-dot"></span>Monetisation roadmap from ₹0 to ₹20K+</li>
-        <li><span class="m-dot"></span>Real analytics & screenshots from my actual pages</li>
-      </ul>
-      <div class="m-price-box">
-        <div>
-          <div class="m-price-num">Coming Soon</div>
-          <div class="m-price-note">Price to be announced shortly</div>
-        </div>
-        <div style="font-size:12px;color:var(--muted);text-align:right;">PDF/PPT<br>Instant Delivery</div>
-      </div>
-      <a href="#" class="m-pay" onclick="handlePay(event)">🛒 Proceed to Payment</a>
-      <p class="m-note">DM for early access →
-        <a href="https://www.instagram.com/theash.x" target="_blank">@theash.x</a>
-      </p>
-    </div>
-  </div>
-</div>
-
-<script src="script.js" defer></script>
+<script src="script.js"></script>
 </body>
 </html>

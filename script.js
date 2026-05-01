@@ -10,9 +10,17 @@ const WA_NUMBER = '918597849566';
 
 let savedLinks = JSON.parse(localStorage.getItem('vaultPages')) || [];
 
-// ── Open WhatsApp — uses anchor click to bypass popup blockers ────────────
+// ── Open WhatsApp — mobile + desktop compatible ───────────────────────────
 function openWA(msg) {
-    const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+    const encoded = encodeURIComponent(msg);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // Mobile uses whatsapp:// deep link for direct app open
+    // Desktop uses wa.me web link
+    const url = isMobile
+        ? 'whatsapp://send?phone=' + WA_NUMBER + '&text=' + encoded
+        : 'https://wa.me/' + WA_NUMBER + '?text=' + encoded;
+
     const a = document.createElement('a');
     a.href = url;
     a.target = '_blank';
